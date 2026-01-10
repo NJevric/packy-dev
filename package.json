@@ -40,21 +40,21 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "express": "^4.21.2",
     "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "get-port": "^7.1.0",
     "open": "^10.1.0",
-    "semver": "^7.6.3",
-    "get-port": "^7.1.0"
+    "semver": "^7.6.3"
   },
   "devDependencies": {
     "@tanstack/vue-query": "^5.62.9",
-    "@vueuse/core": "^12.4.0",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.5",
     "@types/semver": "^7.5.8",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/test-utils": "^2.4.6",
+    "@vueuse/core": "^12.4.0",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

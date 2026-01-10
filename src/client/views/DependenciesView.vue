@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PackageList from '@/components/packages/PackageList.vue'
 import AddPackageDialog from '@/components/packages/AddPackageDialog.vue'
 import OperationToast from '@/components/operations/OperationToast.vue'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { usePackages } from '@/composables/usePackages'
 import { useOperations } from '@/composables/useOperations'
 import { useUiStore } from '@/stores/ui'
@@ -19,6 +20,10 @@ useOperations()
 const packageList = computed(() => packages.data.value || [])
 const isLoading = computed(() => packages.isLoading.value)
 
+// Confirm dialog state
+const isRemoveDialogOpen = ref(false)
+const packageToRemove = ref<string>('')
+
 function handleAddPackage(payload: { name: string; version?: string; isDev: boolean }) {
   addPackage.mutate(payload)
 }
@@ -28,9 +33,12 @@ function handleUpdatePackage(name: string) {
 }
 
 function handleRemovePackage(name: string) {
-  if (confirm(`Are you sure you want to remove ${name}?`)) {
-    removePackage.mutate(name)
-  }
+  packageToRemove.value = name
+  isRemoveDialogOpen.value = true
+}
+
+function confirmRemovePackage() {
+  removePackage.mutate(packageToRemove.value)
 }
 
 function handleSelectPackage(name: string) {
@@ -60,6 +68,15 @@ function handleSelectPackage(name: string) {
       :open="uiStore.isAddPackageDialogOpen"
       @update:open="uiStore.isAddPackageDialogOpen = $event"
       @add="handleAddPackage"
+    />
+
+    <ConfirmDialog
+      :open="isRemoveDialogOpen"
+      @update:open="isRemoveDialogOpen = $event"
+      title="Remove Package"
+      :description="`Are you sure you want to remove ${packageToRemove}? This action cannot be undone.`"
+      confirm-text="Remove"
+      @confirm="confirmRemovePackage"
     />
 
     <OperationToast />

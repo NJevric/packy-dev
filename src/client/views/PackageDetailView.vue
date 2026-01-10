@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import OperationToast from '@/components/operations/OperationToast.vue'
 import { useRegistry } from '@/composables/useRegistry'
 import { usePackages } from '@/composables/usePackages'
@@ -30,6 +31,9 @@ const { badgeVariant, badgeText } = useVersionCompare(
   () => packageData.value?.latest || ''
 )
 
+// Confirm dialog state
+const isRemoveDialogOpen = ref(false)
+
 function formatDownloads(num: number): string {
   if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`
   if (num >= 1000) return `${(num / 1000).toFixed(1)}K`
@@ -41,10 +45,12 @@ function handleUpdate() {
 }
 
 function handleRemove() {
-  if (confirm(`Are you sure you want to remove ${packageName.value}?`)) {
-    removePackage.mutate(packageName.value)
-    router.push({ name: 'dashboard' })
-  }
+  isRemoveDialogOpen.value = true
+}
+
+function confirmRemove() {
+  removePackage.mutate(packageName.value)
+  router.push({ name: 'dashboard' })
 }
 
 function getRepoUrl(repo?: { type: string; url: string }): string | null {
@@ -190,6 +196,15 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
         </div>
       </CardContent>
     </Card>
+
+    <ConfirmDialog
+      :open="isRemoveDialogOpen"
+      @update:open="isRemoveDialogOpen = $event"
+      title="Remove Package"
+      :description="`Are you sure you want to remove ${packageName}? This action cannot be undone and you will be redirected to the dashboard.`"
+      confirm-text="Remove"
+      @confirm="confirmRemove"
+    />
 
     <OperationToast />
   </div>

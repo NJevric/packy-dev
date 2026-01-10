@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import OverviewCard from '@/components/dashboard/OverviewCard.vue'
 import OutdatedCard from '@/components/dashboard/OutdatedCard.vue'
@@ -8,6 +8,7 @@ import PackageList from '@/components/packages/PackageList.vue'
 import AddPackageDialog from '@/components/packages/AddPackageDialog.vue'
 import OperationLog from '@/components/operations/OperationLog.vue'
 import OperationToast from '@/components/operations/OperationToast.vue'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { usePackages } from '@/composables/usePackages'
 import { useProject } from '@/composables/useProject'
 import { useOperations } from '@/composables/useOperations'
@@ -35,6 +36,11 @@ const stats = computed(() => {
   }
 })
 
+// Confirm dialog state
+const isRemoveDialogOpen = ref(false)
+const isUpdateAllDialogOpen = ref(false)
+const packageToRemove = ref<string>('')
+
 function handleAddPackage(payload: { name: string; version?: string; isDev: boolean }) {
   addPackage.mutate(payload)
 }
@@ -44,15 +50,20 @@ function handleUpdatePackage(name: string) {
 }
 
 function handleRemovePackage(name: string) {
-  if (confirm(`Are you sure you want to remove ${name}?`)) {
-    removePackage.mutate(name)
-  }
+  packageToRemove.value = name
+  isRemoveDialogOpen.value = true
+}
+
+function confirmRemovePackage() {
+  removePackage.mutate(packageToRemove.value)
 }
 
 function handleUpdateAll() {
-  if (confirm(`Update all ${stats.value.outdated} outdated packages?`)) {
-    updateAllPackages.mutate()
-  }
+  isUpdateAllDialogOpen.value = true
+}
+
+function confirmUpdateAll() {
+  updateAllPackages.mutate()
 }
 
 function handleSelectPackage(name: string) {
@@ -130,6 +141,25 @@ function handleSelectPackage(name: string) {
       :open="uiStore.isAddPackageDialogOpen"
       @update:open="uiStore.isAddPackageDialogOpen = $event"
       @add="handleAddPackage"
+    />
+
+    <ConfirmDialog
+      :open="isRemoveDialogOpen"
+      @update:open="isRemoveDialogOpen = $event"
+      title="Remove Package"
+      :description="`Are you sure you want to remove ${packageToRemove}? This action cannot be undone.`"
+      confirm-text="Remove"
+      @confirm="confirmRemovePackage"
+    />
+
+    <ConfirmDialog
+      :open="isUpdateAllDialogOpen"
+      @update:open="isUpdateAllDialogOpen = $event"
+      title="Update All Packages"
+      :description="`Update all ${stats.outdated} outdated packages? This will install the latest versions.`"
+      confirm-text="Update All"
+      variant="default"
+      @confirm="confirmUpdateAll"
     />
 
     <!-- Operation toast -->
