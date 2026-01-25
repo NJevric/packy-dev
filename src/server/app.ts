@@ -7,6 +7,7 @@ import { createPackagesRouter } from './routes/packages.js'
 import { createRegistryRouter } from './routes/registry.js'
 import { createOperationsRouter } from './routes/operations.js'
 import { createProjectRouter } from './routes/project.js'
+import { createAuditRouter } from './routes/audit.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -22,6 +23,7 @@ export function createServer(projectPath: string): Express {
   app.use('/api/registry', createRegistryRouter())
   app.use('/api/operations', createOperationsRouter())
   app.use('/api/project', createProjectRouter(projectPath))
+  app.use('/api/audit', createAuditRouter(projectPath))
 
   // Serve static files in production
   const clientDistPath = join(__dirname, '../client')
