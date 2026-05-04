@@ -3,6 +3,7 @@
 import { resolve, join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { existsSync } from 'fs'
+import { randomBytes } from 'crypto'
 import getPort from 'get-port'
 import open from 'open'
 import { createServer } from '../server/app.js'
@@ -52,10 +53,11 @@ async function main() {
     port = await getPort({ port: [5173, 5174, 5175, 5176, 5177] })
   }
   const clientDistPath = join(__dirname, '../client')
+  const token = randomBytes(32).toString('hex')
 
-  const app = createServer(projectPath, clientDistPath, port)
+  const app = createServer(projectPath, clientDistPath, port, token)
 
-  app.listen(port, () => {
+  app.listen(port, '127.0.0.1', () => {
     const url = `http://localhost:${port}`
     console.log('')
     console.log('  🎒 Packy is running!')

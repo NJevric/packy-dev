@@ -161,7 +161,8 @@ export function createAuditRouter(projectPath: string): Router {
   // POST /api/audit/fix - Fix vulnerabilities
   router.post('/fix', (req: Request, res: Response) => {
     try {
-      const { force = false, packageName } = req.body as AuditFixRequest
+      const { packageName } = req.body as AuditFixRequest
+      const force = req.body.force === true
 
       const command = getAuditFixCommand(packageManager, force, packageName)
       console.log('[AUDIT FIX] Running command:', command)

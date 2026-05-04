@@ -68,7 +68,6 @@ async function executeCommand(operationId: string, command: string, cwd: string)
   try {
     childProcess = spawn(cmd, args, {
       cwd,
-      shell: true,
       env: { ...process.env, FORCE_COLOR: '1' },
     })
   } catch (error) {
