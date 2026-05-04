@@ -1,5 +1,9 @@
 # Packy
 
+<p align="center">
+  <img src="public/banner.svg" alt="Packy — modern browser UI for npm package management" width="900"/>
+</p>
+
 Modern browser UI for managing npm dependencies and packages.
 
 Run `packy` in any Node.js project to open a dashboard for installing, removing, and updating packages — with real-time output streaming and a built-in security auditor.
