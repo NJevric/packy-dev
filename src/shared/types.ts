@@ -44,7 +44,7 @@ export type PackageManager = 'npm' | 'yarn' | 'pnpm'
 // Operation types
 export interface Operation {
   id: string
-  type: 'install' | 'update' | 'remove'
+  type: 'install' | 'update' | 'remove' | 'audit' | 'audit-fix'
   packageName?: string
   command: string
   status: 'pending' | 'running' | 'completed' | 'failed'
@@ -82,5 +82,97 @@ export interface UpdatePackageRequest {
 export interface ApiResponse<T> {
   success: boolean
   data?: T
+  error?: string
+}
+
+// Audit types
+export type VulnerabilitySeverity = 'info' | 'low' | 'moderate' | 'high' | 'critical'
+
+export interface AuditMetadata {
+  vulnerabilities: {
+    info: number
+    low: number
+    moderate: number
+    high: number
+    critical: number
+    total: number
+  }
+  dependencies: number
+  devDependencies: number
+  optionalDependencies: number
+  totalDependencies: number
+}
+
+export interface CVSSInfo {
+  score: number
+  vectorString: string
+}
+
+export interface VulnerabilityDetail {
+  source: number
+  name: string
+  dependency: string
+  title: string
+  url: string
+  severity: VulnerabilitySeverity
+  cwe: string[]
+  cvss: CVSSInfo
+  range: string
+}
+
+export interface FixInfo {
+  name: string
+  version: string
+  isSemVerMajor: boolean
+}
+
+export interface Vulnerability {
+  id: string
+  name: string
+  severity: VulnerabilitySeverity
+  isDirect: boolean
+  via: Array<string | VulnerabilityDetail>
+  effects: string[]
+  range: string
+  nodes: string[]
+  fixAvailable: boolean | FixInfo
+  // Optional fields from advisories
+  title?: string
+  url?: string
+  cwe?: string[]
+  cvss?: CVSSInfo
+}
+
+export interface AuditReport {
+  metadata: AuditMetadata
+  vulnerabilities: Vulnerability[]
+  lastRun: Date
+  packageManager: PackageManager
+}
+
+export interface AuditFixRequest {
+  force?: boolean
+  packageName?: string
+}
+
+// Audit log types
+export interface AuditLogEntry {
+  id: string
+  timestamp: Date
+  metadata: AuditMetadata
+  vulnerabilitiesCount: number
+  packageManager: PackageManager
+}
+
+export interface FixLogEntry {
+  id: string
+  timestamp: Date
+  packageName?: string
+  force: boolean
+  operationId: string
+  status: 'pending' | 'running' | 'completed' | 'failed'
+  exitCode?: number
+  completedAt?: Date
+  output?: string
   error?: string
 }
