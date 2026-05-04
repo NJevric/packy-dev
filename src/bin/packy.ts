@@ -1,15 +1,17 @@
 #!/usr/bin/env node
 
-import { resolve } from 'path'
+import { resolve, join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 import { existsSync } from 'fs'
 import getPort from 'get-port'
 import open from 'open'
 import { createServer } from '../server/app.js'
 
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 async function main() {
   const projectPath = process.cwd()
 
-  // Check if package.json exists in the current directory
   const packageJsonPath = resolve(projectPath, 'package.json')
   if (!existsSync(packageJsonPath)) {
     console.error('Error: No package.json found in the current directory.')
@@ -17,11 +19,10 @@ async function main() {
     process.exit(1)
   }
 
-  // Find an available port
   const port = await getPort({ port: [5173, 5174, 5175, 5176, 5177] })
+  const clientDistPath = join(__dirname, '../client')
 
-  // Create and start the server
-  const app = createServer(projectPath)
+  const app = createServer(projectPath, clientDistPath)
 
   app.listen(port, () => {
     const url = `http://localhost:${port}`
