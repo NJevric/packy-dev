@@ -1,12 +1,21 @@
 {
   "name": "packy",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Modern UI for managing npm dependencies and packages",
   "type": "module",
   "main": "dist/server/index.js",
   "bin": {
     "packy": "dist/bin/packy.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": "./dist/server/index.js"
+  },
+  "types": "dist/server/index.d.ts",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "vite",
@@ -15,6 +24,8 @@
     "build:client": "vite build",
     "build:server": "tsup src/server/index.ts src/bin/packy.ts --format esm --dts --outDir dist",
     "preview": "npm run build && node dist/bin/packy.js",
+    "prepublishOnly": "npm run build",
+    "prepack": "npm run build",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
@@ -36,6 +47,13 @@
     "type": "git",
     "url": "git+https://github.com/nikolajevric/packy.git"
   },
+  "bugs": {
+    "url": "https://github.com/nikolajevric/packy/issues"
+  },
+  "homepage": "https://github.com/nikolajevric/packy#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
@@ -43,9 +61,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "get-port": "^7.1.0",
-    "is-even": "^1.0.0",
     "open": "^10.1.0",
-    "playwright": "^1.35.0",
     "semver": "^7.6.3"
   },
   "devDependencies": {

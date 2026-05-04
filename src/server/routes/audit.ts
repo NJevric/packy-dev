@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from 'express'
 import { detectPackageManager } from '../services/packageManager.js'
-import { runCommand, getOperationStatus, operationEvents } from '../services/operationRunner.js'
+import { runCommand, operationEvents } from '../services/operationRunner.js'
 import {
   parseAuditOutput,
   getCachedAuditResults,
@@ -70,7 +70,7 @@ export function createAuditRouter(projectPath: string): Router {
   })
 
   // GET /api/audit/run - Run audit and return summary
-  router.get('/run', async (_req: Request, res: Response) => {
+  router.get('/run', (_req: Request, res: Response) => {
     try {
       // Verify package.json exists
       if (!existsSync(join(projectPath, 'package.json'))) {
@@ -84,85 +84,44 @@ export function createAuditRouter(projectPath: string): Router {
       const command = getAuditCommand(packageManager)
       const operationId = runCommand(command, projectPath, 'audit')
 
-      // Wait for operation to complete and capture output
-      let attempts = 0
-      const maxAttempts = 30 // 30 seconds max wait
+      // Accumulate stdout from the operation event stream directly — no second spawn needed
+      let stdout = ''
+      let resolved = false
 
-      const checkOperation = setInterval(async () => {
-        attempts++
-        const operation = getOperationStatus(operationId)
+      const timeout = setTimeout(() => {
+        if (resolved) return
+        resolved = true
+        operationEvents.off('event', onEvent)
+        res.status(504).json({ success: false, error: 'Audit timed out after 30s' })
+      }, 30000)
 
-        if (!operation) {
-          clearInterval(checkOperation)
-          res.status(500).json({
-            success: false,
-            error: 'Operation not found',
-          })
-          return
-        }
+      const onEvent = (event: OperationEvent) => {
+        if (event.operationId !== operationId) return
 
-        if (operation.status === 'completed' || operation.status === 'failed' || attempts >= maxAttempts) {
-          clearInterval(checkOperation)
+        if (event.type === 'stdout') {
+          stdout += event.data
+        } else if (event.type === 'complete' || event.type === 'error') {
+          if (resolved) return
+          resolved = true
+          clearTimeout(timeout)
+          operationEvents.off('event', onEvent)
 
-          // Even if audit "fails" (non-zero exit), we can often still parse JSON
-          // npm audit returns exit code 1 if vulnerabilities are found
           try {
-            // Note: In a real implementation, we'd need to capture stdout from the operation
-            // For now, we'll run the command again to get output synchronously
-            const { spawn } = await import('child_process')
-            const parts = command.split(' ')
-            const cmd = parts[0]
-            const args = parts.slice(1)
-
-            const child = spawn(cmd, args, { cwd: projectPath, shell: true })
-            let stdout = ''
-            let stderr = ''
-
-            child.stdout?.on('data', (data) => {
-              stdout += data.toString()
-            })
-
-            child.stderr?.on('data', (data) => {
-              stderr += data.toString()
-            })
-
-            child.on('close', (_code) => {
-              try {
-                const report = parseAuditOutput(stdout, packageManager)
-                setCachedAuditResults(report)
-
-                // Log the audit run
-                addAuditLog(
-                  projectPath,
-                  report.metadata,
-                  report.vulnerabilities.length,
-                  packageManager
-                )
-
-                res.json({
-                  success: true,
-                  data: {
-                    operationId,
-                    summary: report.metadata,
-                  },
-                })
-              } catch (error) {
-                console.error('Error parsing audit output:', error)
-                res.status(500).json({
-                  success: false,
-                  error: 'Failed to parse audit output',
-                })
-              }
+            const report = parseAuditOutput(stdout, packageManager)
+            setCachedAuditResults(report)
+            addAuditLog(projectPath, report.metadata, report.vulnerabilities.length, packageManager)
+            res.json({
+              success: true,
+              data: { operationId, summary: report.metadata },
             })
           } catch (error) {
-            console.error('Error running audit:', error)
-            res.status(500).json({
-              success: false,
-              error: 'Failed to run audit',
-            })
+            console.error('Error parsing audit output:', error)
+            res.status(500).json({ success: false, error: 'Failed to parse audit output' })
           }
         }
-      }, 1000)
+      }
+
+      operationEvents.on('event', onEvent)
     } catch (error) {
       console.error('Error starting audit:', error)
       res.status(500).json({

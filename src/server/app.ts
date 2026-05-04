@@ -8,10 +8,10 @@ import { createOperationsRouter } from './routes/operations.js'
 import { createProjectRouter } from './routes/project.js'
 import { createAuditRouter } from './routes/audit.js'
 
-export function createServer(projectPath: string, clientDistPath: string): Express {
+export function createServer(projectPath: string, clientDistPath: string, port?: number): Express {
   const app = express()
 
-  app.use(cors())
+  app.use(cors(port ? { origin: `http://localhost:${port}` } : {}))
   app.use(express.json())
 
   app.use('/api/packages', createPackagesRouter(projectPath))

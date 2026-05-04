@@ -76,12 +76,36 @@ export async function getPackageInfo(packageName: string): Promise<RegistryInfo 
   }
 }
 
+// Lightweight cache for version-only lookups (separate from full metadata cache)
+const versionCache = new Map<string, { version: string; timestamp: number }>()
+
 /**
- * Fetches the latest version of a package from npm registry
+ * Fetches the latest version of a package using the /latest endpoint.
+ * Much lighter than fetching the full package metadata document.
  */
 export async function getLatestVersion(packageName: string): Promise<string | null> {
-  const info = await getPackageInfo(packageName)
-  return info?.version || null
+  const cached = versionCache.get(packageName)
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.version
+  }
+
+  try {
+    const encodedName = packageName.startsWith('@')
+      ? `@${encodeURIComponent(packageName.slice(1))}`
+      : encodeURIComponent(packageName)
+
+    const response = await fetch(`${NPM_REGISTRY}/${encodedName}/latest`, {
+      headers: { Accept: 'application/json' },
+    })
+    if (!response.ok) return null
+
+    const data = (await response.json()) as { version: string }
+    versionCache.set(packageName, { version: data.version, timestamp: Date.now() })
+    return data.version
+  } catch (error) {
+    console.error(`Failed to fetch latest version for ${packageName}:`, error)
+    return null
+  }
 }
 
 /**
