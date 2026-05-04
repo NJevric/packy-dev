@@ -60,4 +60,4 @@ Packy auto-detects the package manager from your project:
 
 ## License
 
-MIT — [Nikola Jevric](https://github.com/nikolajevric)
+MIT — [Nikola Jevric](https://github.com/NJevric)
