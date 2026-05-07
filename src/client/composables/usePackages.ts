@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
 import { useApi } from './useApi'
-import type { Package, AddPackageRequest, UpdatePackageRequest } from '@shared/types'
+import type { Package, UpdatePackageRequest } from '@shared/types'
 
 export function usePackages() {
   const api = useApi()
@@ -11,18 +11,6 @@ export function usePackages() {
     queryKey: ['packages'],
     queryFn: () => api.get<Package[]>('/packages'),
     staleTime: 30 * 1000, // 30 seconds
-  })
-
-  // Mutation: Add a package
-  const addPackage = useMutation({
-    mutationFn: (payload: AddPackageRequest) =>
-      api.post<{ operationId: string }>('/packages', payload),
-    onSuccess: () => {
-      // Invalidate after a delay to let the install finish
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['packages'] })
-      }, 2000)
-    },
   })
 
   // Mutation: Remove a package
@@ -50,16 +38,6 @@ export function usePackages() {
     },
   })
 
-  // Mutation: Update all packages
-  const updateAllPackages = useMutation({
-    mutationFn: () => api.post<{ operationId: string }>('/packages/update-all'),
-    onSuccess: () => {
-      setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ['packages'] })
-      }, 5000)
-    },
-  })
-
   // Refresh packages list
   function refresh() {
     queryClient.invalidateQueries({ queryKey: ['packages'] })
@@ -67,10 +45,8 @@ export function usePackages() {
 
   return {
     packages,
-    addPackage,
     removePackage,
     updatePackage,
-    updateAllPackages,
     refresh,
   }
 }

@@ -4,34 +4,33 @@ import { Package, ShieldAlert, Layers } from 'lucide-vue-next'
 </script>
 
 <template>
-  <div class="min-h-screen bg-background">
+  <div class="min-h-screen" style="background-color: #fafbfc">
     <header class="border-b">
       <div class="container flex h-14 items-center justify-between">
         <div class="flex items-center gap-2">
           <span class="text-xl font-bold">Packy</span>
-          <span class="text-sm text-muted-foreground">Package Manager UI</span>
         </div>
-        <nav class="flex items-center gap-6">
+        <nav class="flex items-center gap-1">
           <RouterLink
             to="/"
-            class="flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary"
-            active-class="text-primary"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
+            exact-active-class="!text-foreground bg-muted"
           >
             <Package class="h-4 w-4" />
             Dashboard
           </RouterLink>
           <RouterLink
             to="/dependencies"
-            class="flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary"
-            active-class="text-primary"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
+            active-class="!text-foreground bg-muted"
           >
             <Layers class="h-4 w-4" />
             Dependencies
           </RouterLink>
           <RouterLink
             to="/security"
-            class="flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary"
-            active-class="text-primary"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
+            active-class="!text-foreground bg-muted"
           >
             <ShieldAlert class="h-4 w-4" />
             Security

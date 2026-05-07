@@ -14,7 +14,6 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   update: [name: string]
-  updateAll: []
 }>()
 
 const outdatedPackages = computed(() => {
@@ -31,18 +30,11 @@ const totalOutdated = computed(() => {
     <CardHeader>
       <div class="flex items-center justify-between">
         <div>
-          <CardTitle>Outdated Packages</CardTitle>
+          <CardTitle class="text-base font-semibold">Outdated Packages</CardTitle>
           <CardDescription>
             {{ totalOutdated }} package{{ totalOutdated !== 1 ? 's' : '' }} can be updated
           </CardDescription>
         </div>
-        <Button
-          v-if="totalOutdated > 0"
-          size="sm"
-          @click="emit('updateAll')"
-        >
-          Update All
-        </Button>
       </div>
     </CardHeader>
     <CardContent>

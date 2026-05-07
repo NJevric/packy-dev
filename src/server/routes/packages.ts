@@ -3,13 +3,11 @@ import { getPackages } from '../services/packageJson.js'
 import { getLatestVersion } from '../services/registryClient.js'
 import {
   detectPackageManager,
-  getInstallCommand,
   getUninstallCommand,
   getUpdateCommand,
-  getUpdateAllCommand,
 } from '../services/packageManager.js'
 import { runCommand } from '../services/operationRunner.js'
-import type { AddPackageRequest, UpdatePackageRequest, Package } from '@shared/types'
+import type { UpdatePackageRequest, Package } from '@shared/types'
 
 export function createPackagesRouter(projectPath: string): Router {
   const router = Router()
@@ -82,35 +80,6 @@ export function createPackagesRouter(projectPath: string): Router {
     }
   })
 
-  // POST /api/packages - Add a new package
-  router.post('/', (req: Request, res: Response) => {
-    try {
-      const { name, version, isDev } = req.body as AddPackageRequest
-
-      if (!name) {
-        res.status(400).json({
-          success: false,
-          error: 'Package name is required',
-        })
-        return
-      }
-
-      const command = getInstallCommand(packageManager, name, version, isDev)
-      const operationId = runCommand(command, projectPath, 'install', name)
-
-      res.json({
-        success: true,
-        data: { operationId },
-      })
-    } catch (error) {
-      console.error('Error adding package:', error)
-      res.status(500).json({
-        success: false,
-        error: 'Failed to add package',
-      })
-    }
-  })
-
   // DELETE /api/packages/:name - Remove a package
   router.delete('/:name', (req: Request, res: Response) => {
     try {
@@ -140,9 +109,15 @@ export function createPackagesRouter(projectPath: string): Router {
       const { name } = req.params
       const { version } = req.body as UpdatePackageRequest
 
+      if (version !== undefined && !/^[^\s]+$/.test(version)) {
+        res.status(400).json({ success: false, error: 'Invalid version string' })
+        return
+      }
+
       const packageName = decodeURIComponent(name)
+      const fromVersion = getPackages(projectPath).find((p) => p.name === packageName)?.current
       const command = getUpdateCommand(packageManager, packageName, version)
-      const operationId = runCommand(command, projectPath, 'update', packageName)
+      const operationId = runCommand(command, projectPath, 'update', packageName, fromVersion)
 
       res.json({
         success: true,
@@ -153,25 +128,6 @@ export function createPackagesRouter(projectPath: string): Router {
       res.status(500).json({
         success: false,
         error: 'Failed to update package',
-      })
-    }
-  })
-
-  // POST /api/packages/update-all - Update all packages
-  router.post('/update-all', (_req: Request, res: Response) => {
-    try {
-      const command = getUpdateAllCommand(packageManager)
-      const operationId = runCommand(command, projectPath, 'update')
-
-      res.json({
-        success: true,
-        data: { operationId },
-      })
-    } catch (error) {
-      console.error('Error updating all packages:', error)
-      res.status(500).json({
-        success: false,
-        error: 'Failed to update all packages',
       })
     }
   })
