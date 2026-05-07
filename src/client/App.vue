@@ -6,7 +6,7 @@ import { Package, ShieldAlert, Layers } from 'lucide-vue-next'
 <template>
   <div class="min-h-screen" style="background-color: #fafbfc">
     <header class="border-b">
-      <div class="container flex h-14 items-center justify-between">
+      <div class="container mx-auto flex h-14 items-center justify-between">
         <div class="flex items-center gap-2">
           <span class="text-xl font-bold">Packy</span>
         </div>
@@ -38,7 +38,7 @@ import { Package, ShieldAlert, Layers } from 'lucide-vue-next'
         </nav>
       </div>
     </header>
-    <main class="container py-6">
+    <main class="container mx-auto py-6">
       <RouterView />
     </main>
   </div>
