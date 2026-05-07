@@ -10,10 +10,9 @@
     "strict": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
     "paths": {
-      "@server/*": ["src/server/*"],
-      "@shared/*": ["src/shared/*"]
+      "@server/*": ["./src/server/*"],
+      "@shared/*": ["./src/shared/*"]
     }
   },
   "include": [

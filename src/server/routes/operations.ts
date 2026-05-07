@@ -55,7 +55,7 @@ export function createOperationsRouter(projectPath: string): Router {
   })
 
   // GET /api/operations/:id - Get operation status
-  router.get('/:id', (req: Request, res: Response) => {
+  router.get('/:id', (req: Request<{ id: string }>, res: Response) => {
     const { id } = req.params
     const operation = getOperationStatus(id)
 
