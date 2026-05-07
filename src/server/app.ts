@@ -29,7 +29,7 @@ export function createServer(projectPath: string, clientDistPath: string, port?:
 
   app.use('/api/packages', createPackagesRouter(projectPath))
   app.use('/api/registry', createRegistryRouter())
-  app.use('/api/operations', createOperationsRouter())
+  app.use('/api/operations', createOperationsRouter(projectPath))
   app.use('/api/project', createProjectRouter(projectPath))
   app.use('/api/audit', createAuditRouter(projectPath))
 
@@ -41,7 +41,7 @@ export function createServer(projectPath: string, clientDistPath: string, port?:
 
     app.use(express.static(clientDistPath, { index: false }))
 
-    app.get('*', (req: Request, res: Response) => {
+    app.get('/{*path}', (req: Request, res: Response) => {
       if (!req.path.startsWith('/api')) {
         res.type('html').send(indexHtml)
       }

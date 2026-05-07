@@ -221,7 +221,7 @@ export function getAuditFixCommand(
       return force ? 'npm audit fix --force' : 'npm audit fix'
     case 'yarn':
       // yarn audit fix doesn't exist; npx yarn-audit-fix is the community equivalent
-      return 'npx yarn-audit-fix'
+      return 'npx yarn-audit-fix@10.1.1'
     case 'pnpm':
       return 'pnpm audit fix'
     default:

@@ -46,6 +46,8 @@ export interface Operation {
   id: string
   type: 'install' | 'update' | 'remove' | 'audit' | 'audit-fix'
   packageName?: string
+  fromVersion?: string
+  toVersion?: string
   command: string
   status: 'pending' | 'running' | 'completed' | 'failed'
   startedAt: Date
@@ -62,19 +64,13 @@ export interface OperationLogEntry {
 
 // SSE Event types
 export type OperationEvent =
-  | { type: 'start'; operationId: string; command: string }
+  | { type: 'start'; operationId: string; command: string; operationType: Operation['type']; packageName?: string; fromVersion?: string }
   | { type: 'stdout'; operationId: string; data: string }
   | { type: 'stderr'; operationId: string; data: string }
-  | { type: 'complete'; operationId: string; exitCode: number }
+  | { type: 'complete'; operationId: string; exitCode: number; fromVersion?: string; toVersion?: string }
   | { type: 'error'; operationId: string; error: string }
 
 // API request/response types
-export interface AddPackageRequest {
-  name: string
-  version?: string
-  isDev: boolean
-}
-
 export interface UpdatePackageRequest {
   version?: string // If not specified, updates to latest
 }

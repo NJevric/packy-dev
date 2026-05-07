@@ -31,7 +31,7 @@ export function useAudit() {
   // Mutation: Run audit
   const runAudit = useMutation({
     mutationFn: () =>
-      api.get<{ operationId: string; summary: any }>('/audit/run'),
+      api.post<{ operationId: string; summary: any }, Record<string, never>>('/audit/run', {}),
     onSuccess: () => {
       // Invalidate after a delay to let the audit finish
       setTimeout(() => {
@@ -55,7 +55,7 @@ export function useAudit() {
 
       // Automatically run a new audit to show updated status
       try {
-        await api.get<{ operationId: string; summary: any }>('/audit/run')
+        await api.post<{ operationId: string; summary: any }, Record<string, never>>('/audit/run', {})
         // Wait a bit for audit to complete
         await new Promise(resolve => setTimeout(resolve, 3000))
         queryClient.invalidateQueries({ queryKey: ['audit', 'results'] })
@@ -83,7 +83,7 @@ export function useAudit() {
 
       // Automatically run a new audit to show updated status
       try {
-        await api.get<{ operationId: string; summary: any }>('/audit/run')
+        await api.post<{ operationId: string; summary: any }, Record<string, never>>('/audit/run', {})
         // Wait a bit for audit to complete
         await new Promise(resolve => setTimeout(resolve, 3000))
         queryClient.invalidateQueries({ queryKey: ['audit', 'results'] })

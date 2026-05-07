@@ -78,17 +78,3 @@ export function getUpdateCommand(
   }
 }
 
-/**
- * Returns the command to update all outdated packages
- */
-export function getUpdateAllCommand(pm: PackageManager): string {
-  switch (pm) {
-    case 'pnpm':
-      return 'pnpm update'
-    case 'yarn':
-      return 'yarn upgrade'
-    case 'npm':
-    default:
-      return 'npm update'
-  }
-}

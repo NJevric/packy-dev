@@ -1,9 +1,11 @@
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useQueryClient } from '@tanstack/vue-query'
 import { useOperationsStore } from '@/stores/operations'
 import type { OperationEvent } from '@shared/types'
 
 export function useOperations() {
   const store = useOperationsStore()
+  const queryClient = useQueryClient()
   const isConnected = ref(false)
   let eventSource: EventSource | null = null
 
@@ -27,6 +29,11 @@ export function useOperations() {
         }
 
         store.handleEvent(data as OperationEvent)
+
+        if (data.type === 'complete' || data.type === 'error') {
+          queryClient.invalidateQueries({ queryKey: ['operations', 'history'] })
+          queryClient.invalidateQueries({ queryKey: ['packages'] })
+        }
       } catch (error) {
         console.error('Failed to parse SSE event:', error)
       }

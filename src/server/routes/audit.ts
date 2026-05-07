@@ -69,8 +69,8 @@ export function createAuditRouter(projectPath: string): Router {
     }
   })
 
-  // GET /api/audit/run - Run audit and return summary
-  router.get('/run', (_req: Request, res: Response) => {
+  // POST /api/audit/run - Run audit and return summary
+  router.post('/run', (_req: Request, res: Response) => {
     try {
       // Verify package.json exists
       if (!existsSync(join(projectPath, 'package.json'))) {
@@ -163,6 +163,11 @@ export function createAuditRouter(projectPath: string): Router {
     try {
       const { packageName } = req.body as AuditFixRequest
       const force = req.body.force === true
+
+      if (packageName !== undefined && !/^[^\s]+$/.test(packageName)) {
+        res.status(400).json({ success: false, error: 'Invalid package name' })
+        return
+      }
 
       const command = getAuditFixCommand(packageManager, force, packageName)
       console.log('[AUDIT FIX] Running command:', command)

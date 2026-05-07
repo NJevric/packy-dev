@@ -17,7 +17,6 @@ const emit = defineEmits<{
   update: [name: string]
   remove: [name: string]
   select: [name: string]
-  add: []
 }>()
 
 const packagesRef = computed(() => props.packages)
@@ -56,9 +55,6 @@ const filters: { value: FilterType; label: string; countKey: keyof typeof counts
           </Badge>
         </Button>
       </div>
-      <Button @click="emit('add')">
-        Add Package
-      </Button>
     </div>
 
     <!-- Package list -->
