@@ -27,7 +27,7 @@ const typeLabel = computed(() => {
 
 <template>
   <div
-    class="flex items-center justify-between p-4 rounded-lg border hover:bg-accent/50 transition-colors cursor-pointer"
+    class="flex items-center justify-between p-4 rounded-lg border bg-white hover:bg-accent/50 transition-colors cursor-pointer"
     @click="emit('select', package.name)"
   >
     <div class="flex-1 min-w-0">

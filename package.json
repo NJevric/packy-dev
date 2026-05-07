@@ -1,12 +1,21 @@
 {
   "name": "packy",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Modern UI for managing npm dependencies and packages",
   "type": "module",
   "main": "dist/server/index.js",
   "bin": {
     "packy": "dist/bin/packy.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": "./dist/server/index.js"
+  },
+  "types": "dist/server/index.d.ts",
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:client": "vite",
@@ -15,6 +24,8 @@
     "build:client": "vite build",
     "build:server": "tsup src/server/index.ts src/bin/packy.ts --format esm --dts --outDir dist",
     "preview": "npm run build && node dist/bin/packy.js",
+    "prepublishOnly": "npm run build",
+    "prepack": "npm run build",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
@@ -36,47 +47,52 @@
     "type": "git",
     "url": "git+https://github.com/nikolajevric/packy.git"
   },
+  "bugs": {
+    "url": "https://github.com/nikolajevric/packy/issues"
+  },
+  "homepage": "https://github.com/nikolajevric/packy#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "get-port": "^7.1.0",
-    "is-even": "^1.0.0",
-    "open": "^10.1.0",
-    "playwright": "^1.35.0",
-    "semver": "^7.6.3"
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "get-port": "^7.2.0",
+    "open": "^11.0.0",
+    "semver": "^7.7.4"
   },
   "devDependencies": {
-    "@tanstack/vue-query": "^5.62.9",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.10.5",
-    "@types/semver": "^7.5.8",
-    "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/test-utils": "^2.4.6",
-    "@vueuse/core": "^12.4.0",
-    "autoprefixer": "^10.4.20",
+    "@tanstack/vue-query": "^5.100.9",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.6.1",
+    "@types/semver": "^7.7.1",
+    "@vitejs/plugin-vue": "^6.0.6",
+    "@vue/test-utils": "^2.4.10",
+    "@vueuse/core": "^14.3.0",
+    "autoprefixer": "^10.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "concurrently": "^9.1.2",
-    "eslint": "^9.17.0",
-    "jsdom": "^25.0.1",
-    "lucide-vue-next": "^0.469.0",
-    "pinia": "^2.3.0",
-    "postcss": "^8.4.49",
-    "radix-vue": "^1.9.11",
-    "tailwind-merge": "^2.6.0",
-    "tailwindcss": "^3.4.17",
+    "concurrently": "^9.2.1",
+    "eslint": "^10.3.0",
+    "jsdom": "^29.1.1",
+    "lucide-vue-next": "^1.0.0",
+    "pinia": "^3.0.4",
+    "postcss": "^8.5.14",
+    "radix-vue": "^1.9.17",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.4",
     "tailwindcss-animate": "^1.0.7",
-    "tsup": "^8.3.5",
-    "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.7",
-    "vitest": "^3.2.4",
-    "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "vue-tsc": "^2.2.0"
+    "tsup": "^8.5.1",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.11",
+    "vitest": "^4.1.5",
+    "vue": "^3.5.34",
+    "vue-router": "^5.0.6",
+    "vue-tsc": "^3.2.8"
   }
 }

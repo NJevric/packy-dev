@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 defineProps<{
@@ -11,19 +11,13 @@ defineProps<{
 </script>
 
 <template>
-  <Card>
-    <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-      <CardTitle class="text-sm font-medium">
-        {{ title }}
-      </CardTitle>
+  <Card class="px-4 py-3">
+    <div class="flex items-center justify-between">
+      <span class="text-xs font-medium text-muted-foreground uppercase tracking-wide">{{ title }}</span>
       <slot name="icon" />
-    </CardHeader>
-    <CardContent>
-      <Skeleton v-if="isLoading" class="h-8 w-16" />
-      <div v-else class="text-2xl font-bold">{{ value }}</div>
-      <p v-if="description" class="text-xs text-muted-foreground">
-        {{ description }}
-      </p>
-    </CardContent>
+    </div>
+    <Skeleton v-if="isLoading" class="mt-2 h-6 w-12" />
+    <div v-else class="mt-1 text-2xl font-bold leading-none">{{ value }}</div>
+    <p v-if="description" class="mt-1 text-xs text-muted-foreground">{{ description }}</p>
   </Card>
 </template>

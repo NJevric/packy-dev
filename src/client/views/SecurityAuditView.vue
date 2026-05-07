@@ -8,10 +8,14 @@ import AuditHistory from '@/components/audit/AuditHistory.vue'
 import FixHistory from '@/components/audit/FixHistory.vue'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { Button } from '@/components/ui/button'
-import { RefreshCw, Wrench, ShieldAlert } from 'lucide-vue-next'
+import OperationToast from '@/components/operations/OperationToast.vue'
+import { useOperations } from '@/composables/useOperations'
+import { RefreshCw, Wrench } from 'lucide-vue-next'
 import type { Vulnerability } from '@shared/types'
 
 const { auditResults, auditLogs, fixLogs, runAudit, fixAll, fixPackage } = useAudit()
+
+useOperations()
 
 const selectedVulnerability = ref<Vulnerability | null>(null)
 const showDetailDialog = ref(false)
@@ -94,49 +98,43 @@ function formatLastRun(date: Date | string | null): string {
 </script>
 
 <template>
-  <div class="container mx-auto p-6 space-y-6">
+  <div class="space-y-6">
     <!-- Header -->
     <div class="flex items-start justify-between">
       <div>
-        <div class="flex items-center gap-3">
-          <ShieldAlert class="h-8 w-8 text-primary" />
-          <h1 class="text-3xl font-bold">Security Audit</h1>
-        </div>
+        <h1 class="text-3xl font-bold">Security Audit</h1>
         <p class="text-muted-foreground mt-2">
           Monitor and fix security vulnerabilities in your dependencies
         </p>
       </div>
+      <div class="flex flex-col items-end gap-2">
+        <div class="flex items-center gap-3">
+          <Button
+            v-if="fixableCount > 0"
+            @click="showFixAllDialog = true"
+            :disabled="fixAll.isPending.value"
+            variant="secondary"
+          >
+            <Wrench class="h-4 w-4 mr-2" />
+            Fix All ({{ fixableCount }})
+          </Button>
+          <Button
+            @click="handleRunAudit"
+            :disabled="runAudit.isPending.value"
+            variant="default"
+          >
+            <RefreshCw :class="{ 'animate-spin': runAudit.isPending.value }" class="h-4 w-4 mr-2" />
+            {{ runAudit.isPending.value ? 'Running Audit...' : 'Run Audit' }}
+          </Button>
+        </div>
+        <span v-if="lastRun" class="text-sm text-muted-foreground">
+          Last run: {{ formatLastRun(lastRun) }}
+        </span>
+      </div>
     </div>
-
+    <hr>
     <!-- Overview Stats -->
     <SecurityOverview :metadata="metadata" :isLoading="auditResults.isLoading.value" />
-
-    <!-- Actions Bar -->
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 bg-muted/50 rounded-lg">
-      <div class="flex gap-3">
-        <Button
-          @click="handleRunAudit"
-          :disabled="runAudit.isPending.value"
-          variant="default"
-        >
-          <RefreshCw :class="{ 'animate-spin': runAudit.isPending.value }" class="h-4 w-4 mr-2" />
-          {{ runAudit.isPending.value ? 'Running Audit...' : 'Run Audit' }}
-        </Button>
-        <Button
-          v-if="fixableCount > 0"
-          @click="showFixAllDialog = true"
-          :disabled="fixAll.isPending.value"
-          variant="secondary"
-        >
-          <Wrench class="h-4 w-4 mr-2" />
-          Fix All ({{ fixableCount }})
-        </Button>
-      </div>
-
-      <div v-if="lastRun" class="text-sm text-muted-foreground">
-        Last run: {{ formatLastRun(lastRun) }}
-      </div>
-    </div>
 
     <!-- Vulnerabilities List -->
     <VulnerabilityList
@@ -179,5 +177,7 @@ function formatLastRun(date: Date | string | null): string {
       variant="default"
       @confirm="handleFixAllConfirm"
     />
+
+    <OperationToast />
   </div>
 </template>

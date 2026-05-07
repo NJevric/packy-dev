@@ -5,13 +5,16 @@ export function createRegistryRouter(): Router {
   const router = Router()
 
   // GET /api/registry/:name - Get package info from npm registry
-  router.get('/:name(*)', async (req: Request, res: Response) => {
+  router.get('/:name', async (req: Request, res: Response) => {
     try {
       const { name } = req.params
 
       // Handle scoped packages
       const packageName = decodeURIComponent(name)
-      const info = await getPackageInfo(packageName)
+      const [info, downloads] = await Promise.all([
+        getPackageInfo(packageName),
+        getDownloadCounts(packageName),
+      ])
 
       if (!info) {
         res.status(404).json({
@@ -21,8 +24,6 @@ export function createRegistryRouter(): Router {
         return
       }
 
-      // Fetch download counts
-      const downloads = await getDownloadCounts(packageName)
       if (downloads) {
         info.downloads = downloads
       }

@@ -1,6 +1,8 @@
 import { spawn, type ChildProcess } from 'child_process'
 import { EventEmitter } from 'events'
 import type { Operation, OperationEvent } from '@shared/types'
+import { addOperationLog } from './operationLogService.js'
+import { getPackages } from './packageJson.js'
 
 // Generate unique operation IDs
 let operationCounter = 0
@@ -21,7 +23,8 @@ export function runCommand(
   command: string,
   cwd: string,
   type: Operation['type'],
-  packageName?: string
+  packageName?: string,
+  fromVersion?: string
 ): string {
   const operationId = generateOperationId()
 
@@ -29,6 +32,7 @@ export function runCommand(
     id: operationId,
     type,
     packageName,
+    fromVersion,
     command,
     status: 'pending',
     startedAt: new Date(),
@@ -55,6 +59,9 @@ async function executeCommand(operationId: string, command: string, cwd: string)
     type: 'start',
     operationId,
     command,
+    operationType: operation.type,
+    packageName: operation.packageName,
+    fromVersion: operation.fromVersion,
   }
   operationEvents.emit('event', startEvent)
 
@@ -68,7 +75,6 @@ async function executeCommand(operationId: string, command: string, cwd: string)
   try {
     childProcess = spawn(cmd, args, {
       cwd,
-      shell: true,
       env: { ...process.env, FORCE_COLOR: '1' },
     })
   } catch (error) {
@@ -108,10 +114,21 @@ async function executeCommand(operationId: string, command: string, cwd: string)
     operation.completedAt = new Date()
     operation.exitCode = code ?? 1
 
+    if (code === 0 && operation.type === 'update' && operation.packageName) {
+      try {
+        const pkg = getPackages(cwd).find((p) => p.name === operation.packageName)
+        if (pkg) operation.toVersion = pkg.current
+      } catch { /* ignore */ }
+    }
+
+    addOperationLog(cwd, { ...operation })
+
     const completeEvent: OperationEvent = {
       type: 'complete',
       operationId,
       exitCode: code ?? 1,
+      fromVersion: operation.fromVersion,
+      toVersion: operation.toVersion,
     }
     operationEvents.emit('event', completeEvent)
 

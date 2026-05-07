@@ -32,7 +32,9 @@ export const useOperationsStore = defineStore('operations', () => {
       case 'start': {
         const operation: Operation = {
           id: event.operationId,
-          type: 'install', // Will be updated when we have more context
+          type: event.operationType,
+          packageName: event.packageName,
+          fromVersion: event.fromVersion,
           command: event.command,
           status: 'running',
           startedAt: new Date(),
@@ -58,6 +60,8 @@ export const useOperationsStore = defineStore('operations', () => {
           operation.status = event.exitCode === 0 ? 'completed' : 'failed'
           operation.completedAt = new Date()
           operation.exitCode = event.exitCode
+          if (event.fromVersion) operation.fromVersion = event.fromVersion
+          if (event.toVersion) operation.toVersion = event.toVersion
         }
         break
       }

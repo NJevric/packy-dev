@@ -1,8 +1,9 @@
 import { Router, type Request, type Response } from 'express'
 import { operationEvents, getOperationStatus, getActiveOperations } from '../services/operationRunner.js'
+import { getOperationLogs } from '../services/operationLogService.js'
 import type { OperationEvent } from '@shared/types'
 
-export function createOperationsRouter(): Router {
+export function createOperationsRouter(projectPath: string): Router {
   const router = Router()
 
   // GET /api/operations/stream - SSE endpoint for operation events
@@ -35,6 +36,24 @@ export function createOperationsRouter(): Router {
     })
   })
 
+  // GET /api/operations - Get all active operations
+  router.get('/', (_req: Request, res: Response) => {
+    const operations = getActiveOperations()
+    res.json({
+      success: true,
+      data: operations,
+    })
+  })
+
+  // GET /api/operations/history - Get persisted operation history
+  router.get('/history', (_req: Request, res: Response) => {
+    const logs = getOperationLogs(projectPath)
+    res.json({
+      success: true,
+      data: logs,
+    })
+  })
+
   // GET /api/operations/:id - Get operation status
   router.get('/:id', (req: Request, res: Response) => {
     const { id } = req.params
@@ -51,15 +70,6 @@ export function createOperationsRouter(): Router {
     res.json({
       success: true,
       data: operation,
-    })
-  })
-
-  // GET /api/operations - Get all active operations
-  router.get('/', (_req: Request, res: Response) => {
-    const operations = getActiveOperations()
-    res.json({
-      success: true,
-      data: operations,
     })
   })
 
