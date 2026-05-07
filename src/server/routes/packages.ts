@@ -45,7 +45,7 @@ export function createPackagesRouter(projectPath: string): Router {
   })
 
   // GET /api/packages/:name - Get a single package
-  router.get('/:name', async (req: Request, res: Response) => {
+  router.get('/:name', async (req: Request<{ name: string }>, res: Response) => {
     try {
       const { name } = req.params
       const packages = getPackages(projectPath)
@@ -81,7 +81,7 @@ export function createPackagesRouter(projectPath: string): Router {
   })
 
   // DELETE /api/packages/:name - Remove a package
-  router.delete('/:name', (req: Request, res: Response) => {
+  router.delete('/:name', (req: Request<{ name: string }>, res: Response) => {
     try {
       const { name } = req.params
 
@@ -104,7 +104,7 @@ export function createPackagesRouter(projectPath: string): Router {
   })
 
   // PATCH /api/packages/:name - Update a package
-  router.patch('/:name', (req: Request, res: Response) => {
+  router.patch('/:name', (req: Request<{ name: string }>, res: Response) => {
     try {
       const { name } = req.params
       const { version } = req.body as UpdatePackageRequest

@@ -5,7 +5,7 @@ export function createRegistryRouter(): Router {
   const router = Router()
 
   // GET /api/registry/:name - Get package info from npm registry
-  router.get('/:name', async (req: Request, res: Response) => {
+  router.get('/:name', async (req: Request<{ name: string }>, res: Response) => {
     try {
       const { name } = req.params
 
