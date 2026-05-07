@@ -1,5 +1,5 @@
 {
-  "name": "packy",
+  "name": "packy-ui",
   "version": "1.0.0",
   "description": "Modern UI for managing npm dependencies and packages",
   "type": "module",
