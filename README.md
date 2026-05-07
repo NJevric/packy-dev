@@ -1,7 +1,7 @@
 # Packy
 
 <p align="center">
-  <img src="public/banner.svg" alt="Packy — modern browser UI for npm package management" width="900"/>
+  <img src="https://raw.githubusercontent.com/njevric/packy-dev/main/public/banner.svg" alt="Packy — modern browser UI for npm package management" width="900"/>
 </p>
 
 Modern browser UI for managing npm dependencies and packages.

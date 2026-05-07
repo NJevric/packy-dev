@@ -45,12 +45,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nikolajevric/packy.git"
+    "url": "git+https://github.com/njevric/packy-dev.git"
   },
   "bugs": {
-    "url": "https://github.com/nikolajevric/packy/issues"
+    "url": "https://github.com/njevric/packy-dev/issues"
   },
-  "homepage": "https://github.com/nikolajevric/packy#readme",
+  "homepage": "https://github.com/njevric/packy-dev#readme",
   "publishConfig": {
     "access": "public"
   },
