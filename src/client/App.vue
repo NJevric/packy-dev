@@ -6,7 +6,7 @@ import { Package, ShieldAlert, Layers } from 'lucide-vue-next'
 <template>
   <div class="min-h-screen" style="background-color: #fafbfc">
     <header class="border-b">
-      <div class="container mx-auto flex h-14 items-center justify-between">
+      <div class="container mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
         <div class="flex items-center gap-2">
           <span class="text-xl font-bold">Packy</span>
         </div>
@@ -17,7 +17,7 @@ import { Package, ShieldAlert, Layers } from 'lucide-vue-next'
             exact-active-class="!text-foreground bg-muted"
           >
             <Package class="h-4 w-4" />
-            Dashboard
+            <span class="hidden sm:inline">Dashboard</span>
           </RouterLink>
           <RouterLink
             to="/dependencies"
@@ -25,7 +25,7 @@ import { Package, ShieldAlert, Layers } from 'lucide-vue-next'
             active-class="!text-foreground bg-muted"
           >
             <Layers class="h-4 w-4" />
-            Dependencies
+            <span class="hidden sm:inline">Dependencies</span>
           </RouterLink>
           <RouterLink
             to="/security"
@@ -33,12 +33,12 @@ import { Package, ShieldAlert, Layers } from 'lucide-vue-next'
             active-class="!text-foreground bg-muted"
           >
             <ShieldAlert class="h-4 w-4" />
-            Security
+            <span class="hidden sm:inline">Security</span>
           </RouterLink>
         </nav>
       </div>
     </header>
-    <main class="container mx-auto py-6">
+    <main class="container mx-auto py-6 px-4 sm:px-6">
       <RouterView />
     </main>
   </div>

@@ -38,6 +38,20 @@ export function usePackages() {
     },
   })
 
+  // Mutation: Update all outdated packages
+  const updateAll = useMutation({
+    mutationFn: () =>
+      api.post<{ operationId: string | null; message?: string }, Record<string, never>>(
+        '/packages/update-all',
+        {}
+      ),
+    onSuccess: () => {
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ['packages'] })
+      }, 2000)
+    },
+  })
+
   // Refresh packages list
   function refresh() {
     queryClient.invalidateQueries({ queryKey: ['packages'] })
@@ -47,6 +61,7 @@ export function usePackages() {
     packages,
     removePackage,
     updatePackage,
+    updateAll,
     refresh,
   }
 }

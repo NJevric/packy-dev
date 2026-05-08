@@ -115,17 +115,17 @@ function formatRelativeTime(date: Date): string {
 
 <template>
   <Card class="overflow-hidden">
-    <div v-if="isLoading" class="flex divide-x">
-      <div v-for="i in 5" :key="i" class="flex-1 px-5 py-4 space-y-2">
+    <div v-if="isLoading" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border">
+      <div v-for="i in 5" :key="i" class="bg-card px-5 py-4 space-y-2">
         <Skeleton class="h-3 w-24" />
         <Skeleton class="h-8 w-12" />
         <Skeleton class="h-3 w-32" />
       </div>
     </div>
 
-    <div v-else class="flex divide-x">
+    <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border">
       <!-- Total Packages -->
-      <div class="flex-1 px-5 py-4">
+      <div class="bg-card px-5 py-4">
         <div class="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Total Packages
         </div>
@@ -136,7 +136,7 @@ function formatRelativeTime(date: Date): string {
       </div>
 
       <!-- Outdated -->
-      <div class="flex-1 px-5 py-4">
+      <div class="bg-card px-5 py-4">
         <div class="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Outdated
         </div>
@@ -168,7 +168,7 @@ function formatRelativeTime(date: Date): string {
       </div>
 
       <!-- Vulnerabilities -->
-      <div class="flex-1 px-5 py-4">
+      <div class="bg-card px-5 py-4">
         <div class="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Vulnerabilities
         </div>
@@ -195,7 +195,7 @@ function formatRelativeTime(date: Date): string {
       </div>
 
       <!-- Install Size -->
-      <div class="flex-1 px-5 py-4">
+      <div class="bg-card px-5 py-4">
         <div class="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Install Size
         </div>
@@ -213,7 +213,7 @@ function formatRelativeTime(date: Date): string {
       </div>
 
       <!-- Last Audit -->
-      <div class="flex-1 px-5 py-4">
+      <div class="bg-card px-5 py-4">
         <div class="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Last Audit
         </div>

@@ -66,7 +66,7 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-start justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
       <div>
         <div class="flex items-center gap-3">
           <Button variant="ghost" size="sm" @click="router.back()">
@@ -78,7 +78,7 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
           {{ registryInfo.description }}
         </p>
       </div>
-      <div class="flex gap-2">
+      <div class="flex flex-wrap gap-2 sm:flex-nowrap sm:shrink-0">
         <Button
           v-if="packageData?.hasUpdate"
           @click="handleUpdate"

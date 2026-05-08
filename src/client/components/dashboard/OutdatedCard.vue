@@ -48,15 +48,15 @@ const totalOutdated = computed(() => {
         <div
           v-for="pkg in outdatedPackages"
           :key="pkg.name"
-          class="flex items-center justify-between p-3 rounded-lg border"
+          class="flex items-center justify-between p-3 rounded-lg border gap-3"
         >
-          <div class="space-y-1">
-            <div class="font-medium">{{ pkg.name }}</div>
+          <div class="space-y-1 min-w-0">
+            <div class="font-medium truncate">{{ pkg.name }}</div>
             <div class="text-sm text-muted-foreground">
               {{ pkg.current }} → {{ pkg.latest }}
             </div>
           </div>
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 shrink-0">
             <VersionBadge :current="pkg.current" :latest="pkg.latest" />
             <Button size="sm" variant="outline" @click="emit('update', pkg.name)">
               Update

@@ -6,17 +6,21 @@
 
 Modern browser UI for managing npm dependencies and packages.
 
-Run `packy` in any Node.js project to open a dashboard for installing, removing, and updating packages — with real-time output streaming and a built-in security auditor.
+Run `packy` in any Node.js project to open a fully responsive dashboard for installing, removing, and updating packages — with real-time output streaming and a built-in security auditor.
 
 ## Features
 
-- View all dependencies with current vs. latest versions
-- Install, remove, and update packages (npm, yarn, pnpm)
-- One-click "update all" with confirmation
-- Security audit with severity breakdown (critical / high / moderate / low)
-- Apply audit fixes — including force fixes for breaking changes
-- Persistent audit and fix history logs
-- Real-time command output streamed to the browser
+- **Dashboard** — stats bar showing total packages, outdated count, vulnerability summary, node_modules install size, and last audit time with sparkline
+- **Package management** — view all dependencies with current vs. latest versions, install, remove, and update individual packages
+- **Update All** — one-click bulk update for all outdated packages with live progress
+- **Package detail** — per-package view with npm registry info: version history, license, weekly downloads, homepage, repository, and keywords
+- **Security audit** — run `npm audit` from the browser with severity breakdown (critical / high / moderate / low / info)
+- **Audit fixes** — apply fixes individually or all at once, with automatic force-fix for breaking major version changes
+- **Audit & fix history** — persistent logs of every audit run and fix applied
+- **Activity feed** — timeline of recent installs, updates, removals, and audits across sessions
+- **Real-time streaming** — command output streamed live to the browser via SSE
+- **Smart filtering** — search packages by name, filter by type (all / outdated / dependencies / devDependencies)
+- **Fully responsive** — works on mobile, tablet, and desktop
 
 ## Requirements
 
@@ -25,7 +29,7 @@ Node.js >= 18.0.0
 ## Installation
 
 ```bash
-npm install -g packy
+npm install -g packydash
 ```
 
 ## Usage
@@ -37,7 +41,7 @@ cd your-project
 packy
 ```
 
-Packy starts a local server, opens your browser, and serves the UI pointing at your project's `package.json`.
+Packy starts a local server, opens your browser, and serves the dashboard pointed at your project's `package.json`.
 
 ### Options
 
