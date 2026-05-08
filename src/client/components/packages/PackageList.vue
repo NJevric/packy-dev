@@ -52,7 +52,7 @@ const hasMore = computed(() =>
             @update:model-value="setQuery($event as string)"
           />
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex flex-wrap items-center gap-2">
           <Button
             v-for="f in filters"
             :key="f.value"

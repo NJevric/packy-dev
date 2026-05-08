@@ -55,7 +55,7 @@ function handleSelectPackage(name: string) {
       </template>
       <template v-else>
         <h1 class="text-3xl font-bold tracking-tight">{{ project?.name ?? 'Dashboard' }}</h1>
-        <p class="text-sm text-muted-foreground mt-1">
+        <p class="text-sm text-muted-foreground mt-1 break-all">
           {{ project?.path }}
           <template v-if="project?.packageManager"> · {{ project.packageManager }}</template>
           <template v-if="project?.version"> · v{{ project.version }}</template>
