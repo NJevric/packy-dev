@@ -78,9 +78,11 @@ function handleSelectPackage(name: string) {
         <PackageList
           :packages="packageList"
           :is-loading="isLoading"
+          :limit="7"
           @update="handleUpdatePackage"
           @remove="handleRemovePackage"
           @select="handleSelectPackage"
+          @view-all="router.push({ name: 'dependencies' })"
         />
       </div>
 

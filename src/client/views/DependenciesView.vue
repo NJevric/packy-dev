@@ -5,16 +5,18 @@ import PackageList from '@/components/packages/PackageList.vue'
 import OutdatedCard from '@/components/dashboard/OutdatedCard.vue'
 import OperationToast from '@/components/operations/OperationToast.vue'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { Button } from '@/components/ui/button'
 import { usePackages } from '@/composables/usePackages'
 import { useOperations } from '@/composables/useOperations'
 const router = useRouter()
 
-const { packages, removePackage, updatePackage } = usePackages()
+const { packages, removePackage, updatePackage, updateAll } = usePackages()
 
 useOperations()
 
 const packageList = computed(() => packages.data.value || [])
 const isLoading = computed(() => packages.isLoading.value)
+const outdatedCount = computed(() => packageList.value.filter(p => p.hasUpdate).length)
 
 const isRemoveDialogOpen = ref(false)
 const packageToRemove = ref<string>('')
@@ -32,7 +34,6 @@ function confirmRemovePackage() {
   removePackage.mutate(packageToRemove.value)
 }
 
-
 function handleSelectPackage(name: string) {
   router.push({ name: 'package-detail', params: { name } })
 }
@@ -40,12 +41,21 @@ function handleSelectPackage(name: string) {
 
 <template>
   <div class="space-y-6">
-    
-    <div>
-      <h1 class="text-3xl font-bold tracking-tight">Dependencies</h1>
-      <p class="text-muted-foreground">
-        View and manage all project packages
-      </p>
+
+    <div class="flex items-start justify-between">
+      <div>
+        <h1 class="text-3xl font-bold tracking-tight">Dependencies</h1>
+        <p class="text-muted-foreground">
+          View and manage all project packages
+        </p>
+      </div>
+      <Button
+        v-if="outdatedCount > 0"
+        :disabled="updateAll.isPending.value"
+        @click="updateAll.mutate()"
+      >
+        {{ updateAll.isPending.value ? 'Updating...' : `Update All (${outdatedCount})` }}
+      </Button>
     </div>
 
     <hr>

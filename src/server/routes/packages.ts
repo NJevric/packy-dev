@@ -5,6 +5,7 @@ import {
   detectPackageManager,
   getUninstallCommand,
   getUpdateCommand,
+  getUpdateAllCommand,
 } from '../services/packageManager.js'
 import { runCommand } from '../services/operationRunner.js'
 import type { UpdatePackageRequest, Package } from '@shared/types'
@@ -77,6 +78,35 @@ export function createPackagesRouter(projectPath: string): Router {
         success: false,
         error: 'Failed to get package',
       })
+    }
+  })
+
+  // POST /api/packages/update-all - Update all outdated packages
+  router.post('/update-all', async (_req: Request, res: Response) => {
+    try {
+      const packages = getPackages(projectPath)
+
+      const packagesWithVersions = await Promise.all(
+        packages.map(async (pkg) => {
+          const latest = await getLatestVersion(pkg.name)
+          return { ...pkg, latest, hasUpdate: latest ? pkg.current !== latest : false }
+        })
+      )
+
+      const outdated = packagesWithVersions.filter((p) => p.hasUpdate).map((p) => p.name)
+
+      if (outdated.length === 0) {
+        res.json({ success: true, data: { operationId: null, message: 'All packages are up to date' } })
+        return
+      }
+
+      const command = getUpdateAllCommand(packageManager, outdated)
+      const operationId = runCommand(command, projectPath, 'update', undefined, undefined)
+
+      res.json({ success: true, data: { operationId } })
+    } catch (error) {
+      console.error('Error updating all packages:', error)
+      res.status(500).json({ success: false, error: 'Failed to update all packages' })
     }
   })
 
