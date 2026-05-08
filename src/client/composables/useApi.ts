@@ -1,5 +1,9 @@
 const API_BASE = '/api'
 
+function getToken(): string | undefined {
+  return (window as Window & { __PACKY_TOKEN__?: string }).__PACKY_TOKEN__
+}
+
 interface ApiResponse<T> {
   success: boolean
   data?: T
@@ -23,10 +27,12 @@ export function useApi() {
   }
 
   async function post<T, D = unknown>(endpoint: string, data?: D): Promise<T> {
+    const token = getToken()
     const response = await fetch(`${API_BASE}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { 'x-packy-token': token } : {}),
       },
       body: data ? JSON.stringify(data) : undefined,
     })
@@ -34,10 +40,12 @@ export function useApi() {
   }
 
   async function patch<T, D = unknown>(endpoint: string, data?: D): Promise<T> {
+    const token = getToken()
     const response = await fetch(`${API_BASE}${endpoint}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
+        ...(token ? { 'x-packy-token': token } : {}),
       },
       body: data ? JSON.stringify(data) : undefined,
     })
@@ -45,8 +53,12 @@ export function useApi() {
   }
 
   async function del<T>(endpoint: string): Promise<T> {
+    const token = getToken()
     const response = await fetch(`${API_BASE}${endpoint}`, {
       method: 'DELETE',
+      headers: {
+        ...(token ? { 'x-packy-token': token } : {}),
+      },
     })
     return handleResponse<T>(response)
   }
