@@ -1,6 +1,6 @@
 {
   "name": "packydash",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Modern UI for managing npm dependencies and packages",
   "type": "module",
   "main": "dist/server/index.js",
