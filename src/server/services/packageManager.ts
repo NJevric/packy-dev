@@ -78,3 +78,20 @@ export function getUpdateCommand(
   }
 }
 
+/**
+ * Returns a command to update all given packages to latest
+ */
+export function getUpdateAllCommand(pm: PackageManager, packageNames: string[]): string {
+  const pkgs = packageNames.map((name) => `${name}@latest`).join(' ')
+
+  switch (pm) {
+    case 'pnpm':
+      return `pnpm add ${pkgs}`
+    case 'yarn':
+      return `yarn add ${pkgs}`
+    case 'npm':
+    default:
+      return `npm install ${pkgs}`
+  }
+}
+

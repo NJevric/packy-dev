@@ -27,15 +27,15 @@ const typeLabel = computed(() => {
 
 <template>
   <div
-    class="flex items-center justify-between p-4 rounded-lg border bg-white hover:bg-accent/50 transition-colors cursor-pointer"
+    class="flex items-center justify-between p-4 rounded-lg border bg-white hover:bg-accent/50 transition-colors cursor-pointer gap-3"
     @click="emit('select', package.name)"
   >
     <div class="flex-1 min-w-0">
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap">
         <span class="font-medium truncate">{{ package.name }}</span>
-        <Badge variant="outline" class="text-xs">{{ typeLabel }}</Badge>
+        <Badge variant="outline" class="text-xs shrink-0">{{ typeLabel }}</Badge>
       </div>
-      <div class="flex items-center gap-2 mt-1">
+      <div class="flex items-center gap-2 mt-1 flex-wrap">
         <span class="text-sm text-muted-foreground">{{ package.current }}</span>
         <template v-if="package.hasUpdate">
           <span class="text-muted-foreground">→</span>
@@ -44,7 +44,7 @@ const typeLabel = computed(() => {
         </template>
       </div>
     </div>
-    <div class="flex items-center gap-2 ml-4" @click.stop>
+    <div class="flex items-center gap-2 shrink-0" @click.stop>
       <Button
         v-if="package.hasUpdate"
         size="sm"

@@ -55,7 +55,7 @@ function handleSelectPackage(name: string) {
       </template>
       <template v-else>
         <h1 class="text-3xl font-bold tracking-tight">{{ project?.name ?? 'Dashboard' }}</h1>
-        <p class="text-sm text-muted-foreground mt-1">
+        <p class="text-sm text-muted-foreground mt-1 break-all">
           {{ project?.path }}
           <template v-if="project?.packageManager"> · {{ project.packageManager }}</template>
           <template v-if="project?.version"> · v{{ project.version }}</template>
@@ -78,9 +78,11 @@ function handleSelectPackage(name: string) {
         <PackageList
           :packages="packageList"
           :is-loading="isLoading"
+          :limit="7"
           @update="handleUpdatePackage"
           @remove="handleRemovePackage"
           @select="handleSelectPackage"
+          @view-all="router.push({ name: 'dependencies' })"
         />
       </div>
 

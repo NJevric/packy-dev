@@ -100,15 +100,15 @@ function formatLastRun(date: Date | string | null): string {
 <template>
   <div class="space-y-6">
     <!-- Header -->
-    <div class="flex items-start justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
       <div>
         <h1 class="text-3xl font-bold">Security Audit</h1>
         <p class="text-muted-foreground mt-2">
           Monitor and fix security vulnerabilities in your dependencies
         </p>
       </div>
-      <div class="flex flex-col items-end gap-2">
-        <div class="flex items-center gap-3">
+      <div class="flex flex-col sm:items-end gap-2">
+        <div class="flex flex-wrap items-center gap-3">
           <Button
             v-if="fixableCount > 0"
             @click="showFixAllDialog = true"
