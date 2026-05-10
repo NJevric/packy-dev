@@ -45,10 +45,11 @@ function handleSelectPackage(name: string) {
 
 <template>
   <div class="space-y-6">
-
     <div class="flex flex-wrap items-start justify-between gap-3">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight">Dependencies</h1>
+        <h1 class="text-3xl font-bold tracking-tight">
+          Dependencies
+        </h1>
         <p class="text-muted-foreground">
           View and manage all project packages
         </p>
@@ -83,10 +84,10 @@ function handleSelectPackage(name: string) {
 
     <ConfirmDialog
       :open="isRemoveDialogOpen"
-      @update:open="isRemoveDialogOpen = $event"
       title="Remove Package"
       :description="`Are you sure you want to remove ${packageToRemove}? This action cannot be undone.`"
       confirm-text="Remove"
+      @update:open="isRemoveDialogOpen = $event"
       @confirm="confirmRemovePackage"
     />
 

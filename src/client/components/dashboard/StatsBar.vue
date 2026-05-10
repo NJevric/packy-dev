@@ -115,21 +115,33 @@ function formatRelativeTime(date: Date): string {
 
 <template>
   <Card class="overflow-hidden">
-    <div v-if="isLoading" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border">
-      <div v-for="i in 5" :key="i" class="bg-card px-5 py-4 space-y-2">
+    <div
+      v-if="isLoading"
+      class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border"
+    >
+      <div
+        v-for="i in 5"
+        :key="i"
+        class="bg-card px-5 py-4 space-y-2"
+      >
         <Skeleton class="h-3 w-24" />
         <Skeleton class="h-8 w-12" />
         <Skeleton class="h-3 w-32" />
       </div>
     </div>
 
-    <div v-else class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border">
+    <div
+      v-else
+      class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-px bg-border"
+    >
       <!-- Total Packages -->
       <div class="bg-card px-5 py-4">
         <div class="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Total Packages
         </div>
-        <div class="text-3xl font-bold leading-none">{{ total }}</div>
+        <div class="text-3xl font-bold leading-none">
+          {{ total }}
+        </div>
         <div class="text-xs text-muted-foreground mt-2">
           {{ prodCount }} prod · {{ devCount }} dev
         </div>
@@ -140,7 +152,9 @@ function formatRelativeTime(date: Date): string {
         <div class="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Outdated
         </div>
-        <div class="text-3xl font-bold leading-none">{{ outdatedCount }}</div>
+        <div class="text-3xl font-bold leading-none">
+          {{ outdatedCount }}
+        </div>
         <template v-if="outdatedCount > 0">
           <div class="flex h-1 rounded-full overflow-hidden mt-3 gap-px">
             <div
@@ -164,7 +178,12 @@ function formatRelativeTime(date: Date): string {
             <span class="text-blue-400 font-medium">{{ outdatedBreakdown.patch }} patch</span>
           </div>
         </template>
-        <div v-else class="text-xs text-muted-foreground mt-2">All up to date</div>
+        <div
+          v-else
+          class="text-xs text-muted-foreground mt-2"
+        >
+          All up to date
+        </div>
       </div>
 
       <!-- Vulnerabilities -->
@@ -187,8 +206,14 @@ function formatRelativeTime(date: Date): string {
               v-for="(s, i) in vulnSeverities"
               :key="s.label"
             >
-              <span :class="s.color" class="font-medium">{{ s.count }} {{ s.label }}</span>
-              <span v-if="i < vulnSeverities.length - 1" class="text-muted-foreground"> · </span>
+              <span
+                :class="s.color"
+                class="font-medium"
+              >{{ s.count }} {{ s.label }}</span>
+              <span
+                v-if="i < vulnSeverities.length - 1"
+                class="text-muted-foreground"
+              > · </span>
             </span>
           </template>
         </div>
@@ -204,11 +229,17 @@ function formatRelativeTime(date: Date): string {
             <span class="text-3xl font-bold leading-none">{{ installSizeFormatted }}</span>
             <span class="text-sm text-muted-foreground">node_modules</span>
           </div>
-          <div class="text-xs text-muted-foreground mt-2">{{ fileCountFormatted }} files</div>
+          <div class="text-xs text-muted-foreground mt-2">
+            {{ fileCountFormatted }} files
+          </div>
         </template>
         <template v-else>
-          <div class="text-3xl font-bold leading-none">—</div>
-          <div class="text-xs text-muted-foreground mt-2">not installed</div>
+          <div class="text-3xl font-bold leading-none">
+            —
+          </div>
+          <div class="text-xs text-muted-foreground mt-2">
+            not installed
+          </div>
         </template>
       </div>
 
@@ -218,7 +249,9 @@ function formatRelativeTime(date: Date): string {
           Last Audit
         </div>
         <div class="flex items-center gap-3">
-          <div class="text-3xl font-bold leading-none">{{ lastAuditTime ?? '—' }}</div>
+          <div class="text-3xl font-bold leading-none">
+            {{ lastAuditTime ?? '—' }}
+          </div>
           <svg
             v-if="sparklinePoints"
             width="64"
@@ -239,7 +272,10 @@ function formatRelativeTime(date: Date): string {
         <div class="text-xs text-muted-foreground mt-2">
           <template v-if="lastLog">
             {{ lastLog.packageManager }} audit ·
-            <span :class="auditPassed ? 'text-green-600' : 'text-red-500'" class="font-medium">
+            <span
+              :class="auditPassed ? 'text-green-600' : 'text-red-500'"
+              class="font-medium"
+            >
               {{ auditPassed ? 'passed' : 'failed' }}
             </span>
           </template>

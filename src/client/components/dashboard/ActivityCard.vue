@@ -17,17 +17,25 @@ const preview = computed(() => activities.value.slice(0, PREVIEW_LIMIT))
   <Card>
     <CardHeader class="pb-3">
       <div class="flex items-center justify-between">
-        <CardTitle class="text-base font-semibold">Activity</CardTitle>
+        <CardTitle class="text-base font-semibold">
+          Activity
+        </CardTitle>
         <span class="text-sm text-muted-foreground">
           {{ activities.length }} recent
         </span>
       </div>
     </CardHeader>
     <CardContent>
-      <div v-if="preview.length === 0" class="py-8 text-center text-sm text-muted-foreground">
+      <div
+        v-if="preview.length === 0"
+        class="py-8 text-center text-sm text-muted-foreground"
+      >
         No recent activity
       </div>
-      <div v-else class="space-y-4">
+      <div
+        v-else
+        class="space-y-4"
+      >
         <div
           v-for="item in preview"
           :key="item.id"
@@ -37,8 +45,12 @@ const preview = computed(() => activities.value.slice(0, PREVIEW_LIMIT))
             <div :class="['h-2 w-2 rounded-full', item.dotColor]" />
           </div>
           <div class="min-w-0 flex-1">
-            <p class="text-sm leading-snug">{{ item.label }}</p>
-            <p class="mt-0.5 text-xs text-muted-foreground">{{ item.actor }}</p>
+            <p class="text-sm leading-snug">
+              {{ item.label }}
+            </p>
+            <p class="mt-0.5 text-xs text-muted-foreground">
+              {{ item.actor }}
+            </p>
           </div>
           <span class="flex-shrink-0 whitespace-nowrap text-xs text-muted-foreground">
             {{ formatTimeAgo(item.timestamp) }}

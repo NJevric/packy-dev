@@ -44,17 +44,26 @@ function handleCancel() {
 </script>
 
 <template>
-  <Dialog :open="open" @update:open="emit('update:open', $event)">
+  <Dialog
+    :open="open"
+    @update:open="emit('update:open', $event)"
+  >
     <DialogContent>
       <DialogHeader>
         <DialogTitle>{{ title }}</DialogTitle>
         <DialogDescription>{{ description }}</DialogDescription>
       </DialogHeader>
       <DialogFooter>
-        <Button variant="outline" @click="handleCancel">
+        <Button
+          variant="outline"
+          @click="handleCancel"
+        >
           {{ cancelText }}
         </Button>
-        <Button :variant="variant" @click="handleConfirm">
+        <Button
+          :variant="variant"
+          @click="handleConfirm"
+        >
           {{ confirmText }}
         </Button>
       </DialogFooter>

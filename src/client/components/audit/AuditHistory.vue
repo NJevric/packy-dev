@@ -62,17 +62,28 @@ function getSeverityColor(severity: string): 'default' | 'destructive' | 'warnin
       </CardTitle>
     </CardHeader>
     <CardContent>
-      <div v-if="isLoading" class="text-center py-8 text-muted-foreground">
+      <div
+        v-if="isLoading"
+        class="text-center py-8 text-muted-foreground"
+      >
         Loading audit history...
       </div>
 
-      <div v-else-if="formattedLogs.length === 0" class="text-center py-8 text-muted-foreground">
+      <div
+        v-else-if="formattedLogs.length === 0"
+        class="text-center py-8 text-muted-foreground"
+      >
         <ShieldCheck class="h-12 w-12 mx-auto mb-3 opacity-50" />
         <p>No audit history yet</p>
-        <p class="text-sm">Run your first audit to see results here</p>
+        <p class="text-sm">
+          Run your first audit to see results here
+        </p>
       </div>
 
-      <div v-else class="space-y-3">
+      <div
+        v-else
+        class="space-y-3"
+      >
         <div
           v-for="log in formattedLogs.slice(0, 10)"
           :key="log.id"
@@ -84,7 +95,10 @@ function getSeverityColor(severity: string): 'default' | 'destructive' | 'warnin
                 v-if="log.totalVulnerabilities > 0"
                 class="h-4 w-4 text-destructive"
               />
-              <ShieldCheck v-else class="h-4 w-4 text-green-600" />
+              <ShieldCheck
+                v-else
+                class="h-4 w-4 text-green-600"
+              />
               <span class="font-medium">
                 {{ log.totalVulnerabilities }} vulnerabilities found
               </span>
@@ -95,19 +109,34 @@ function getSeverityColor(severity: string): 'default' | 'destructive' | 'warnin
           </div>
 
           <div class="flex flex-wrap gap-2 mt-2">
-            <Badge v-if="log.criticalCount > 0" :variant="getSeverityColor('critical')">
+            <Badge
+              v-if="log.criticalCount > 0"
+              :variant="getSeverityColor('critical')"
+            >
               Critical: {{ log.criticalCount }}
             </Badge>
-            <Badge v-if="log.highCount > 0" :variant="getSeverityColor('high')">
+            <Badge
+              v-if="log.highCount > 0"
+              :variant="getSeverityColor('high')"
+            >
               High: {{ log.highCount }}
             </Badge>
-            <Badge v-if="log.moderateCount > 0" :variant="getSeverityColor('moderate')">
+            <Badge
+              v-if="log.moderateCount > 0"
+              :variant="getSeverityColor('moderate')"
+            >
               Moderate: {{ log.moderateCount }}
             </Badge>
-            <Badge v-if="log.lowCount > 0" variant="secondary">
+            <Badge
+              v-if="log.lowCount > 0"
+              variant="secondary"
+            >
               Low: {{ log.lowCount }}
             </Badge>
-            <Badge v-if="log.infoCount > 0" variant="secondary">
+            <Badge
+              v-if="log.infoCount > 0"
+              variant="secondary"
+            >
               Info: {{ log.infoCount }}
             </Badge>
           </div>

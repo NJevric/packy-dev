@@ -54,11 +54,17 @@ function handleSelectPackage(name: string) {
         <Skeleton class="mt-2 h-4 w-56" />
       </template>
       <template v-else>
-        <h1 class="text-3xl font-bold tracking-tight">{{ project?.name ?? 'Dashboard' }}</h1>
+        <h1 class="text-3xl font-bold tracking-tight">
+          {{ project?.name ?? 'Dashboard' }}
+        </h1>
         <p class="text-sm text-muted-foreground mt-1 break-all">
           {{ project?.path }}
-          <template v-if="project?.packageManager"> · {{ project.packageManager }}</template>
-          <template v-if="project?.version"> · v{{ project.version }}</template>
+          <template v-if="project?.packageManager">
+            · {{ project.packageManager }}
+          </template>
+          <template v-if="project?.version">
+            · v{{ project.version }}
+          </template>
         </p>
       </template>
     </div>
@@ -94,10 +100,10 @@ function handleSelectPackage(name: string) {
     <!-- Dialogs -->
     <ConfirmDialog
       :open="isRemoveDialogOpen"
-      @update:open="isRemoveDialogOpen = $event"
       title="Remove Package"
       :description="`Are you sure you want to remove ${packageToRemove}? This action cannot be undone.`"
       confirm-text="Remove"
+      @update:open="isRemoveDialogOpen = $event"
       @confirm="confirmRemovePackage"
     />
 

@@ -43,7 +43,10 @@ function handleConfirm() {
 </script>
 
 <template>
-  <Dialog :open="open" @update:open="handleOpen">
+  <Dialog
+    :open="open"
+    @update:open="handleOpen"
+  >
     <DialogContent class="max-w-sm">
       <DialogHeader>
         <DialogTitle>Choose Version</DialogTitle>
@@ -54,15 +57,25 @@ function handleConfirm() {
       </DialogHeader>
 
       <div class="max-h-72 overflow-y-auto rounded-md border">
-        <div v-if="isLoading" class="p-3 space-y-2">
-          <Skeleton v-for="i in 6" :key="i" class="h-8 w-full" />
+        <div
+          v-if="isLoading"
+          class="p-3 space-y-2"
+        >
+          <Skeleton
+            v-for="i in 6"
+            :key="i"
+            class="h-8 w-full"
+          />
         </div>
-        <div v-else-if="!versions?.length" class="p-4 text-center text-sm text-muted-foreground">
+        <div
+          v-else-if="!versions?.length"
+          class="p-4 text-center text-sm text-muted-foreground"
+        >
           No versions found
         </div>
         <button
-          v-else
           v-for="version in versions"
+          v-else
           :key="version"
           class="w-full flex items-center justify-between px-3 py-2 text-sm hover:bg-accent transition-colors text-left"
           :class="selected === version ? 'bg-accent' : ''"
@@ -70,15 +83,35 @@ function handleConfirm() {
         >
           <span class="font-mono">{{ version }}</span>
           <div class="flex items-center gap-1.5 shrink-0">
-            <Badge v-if="version === latestVersion" variant="secondary" class="text-xs">latest</Badge>
-            <Badge v-if="version === currentVersion" variant="outline" class="text-xs">current</Badge>
+            <Badge
+              v-if="version === latestVersion"
+              variant="secondary"
+              class="text-xs"
+            >
+              latest
+            </Badge>
+            <Badge
+              v-if="version === currentVersion"
+              variant="outline"
+              class="text-xs"
+            >
+              current
+            </Badge>
           </div>
         </button>
       </div>
 
       <DialogFooter>
-        <Button variant="outline" @click="handleOpen(false)">Cancel</Button>
-        <Button :disabled="!selected" @click="handleConfirm">
+        <Button
+          variant="outline"
+          @click="handleOpen(false)"
+        >
+          Cancel
+        </Button>
+        <Button
+          :disabled="!selected"
+          @click="handleConfirm"
+        >
           Install {{ selected || '...' }}
         </Button>
       </DialogFooter>

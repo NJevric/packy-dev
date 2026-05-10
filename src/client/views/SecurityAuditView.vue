@@ -102,7 +102,9 @@ function formatLastRun(date: Date | string | null): string {
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
       <div>
-        <h1 class="text-3xl font-bold">Security Audit</h1>
+        <h1 class="text-3xl font-bold">
+          Security Audit
+        </h1>
         <p class="text-muted-foreground mt-2">
           Monitor and fix security vulnerabilities in your dependencies
         </p>
@@ -111,35 +113,44 @@ function formatLastRun(date: Date | string | null): string {
         <div class="flex flex-wrap items-center gap-3">
           <Button
             v-if="fixableCount > 0"
-            @click="showFixAllDialog = true"
             :disabled="fixAll.isPending.value"
             variant="secondary"
+            @click="showFixAllDialog = true"
           >
             <Wrench class="h-4 w-4 mr-2" />
             Fix All ({{ fixableCount }})
           </Button>
           <Button
-            @click="handleRunAudit"
             :disabled="runAudit.isPending.value"
             variant="default"
+            @click="handleRunAudit"
           >
-            <RefreshCw :class="{ 'animate-spin': runAudit.isPending.value }" class="h-4 w-4 mr-2" />
+            <RefreshCw
+              :class="{ 'animate-spin': runAudit.isPending.value }"
+              class="h-4 w-4 mr-2"
+            />
             {{ runAudit.isPending.value ? 'Running Audit...' : 'Run Audit' }}
           </Button>
         </div>
-        <span v-if="lastRun" class="text-sm text-muted-foreground">
+        <span
+          v-if="lastRun"
+          class="text-sm text-muted-foreground"
+        >
           Last run: {{ formatLastRun(lastRun) }}
         </span>
       </div>
     </div>
     <hr>
     <!-- Overview Stats -->
-    <SecurityOverview :metadata="metadata" :isLoading="auditResults.isLoading.value" />
+    <SecurityOverview
+      :metadata="metadata"
+      :is-loading="auditResults.isLoading.value"
+    />
 
     <!-- Vulnerabilities List -->
     <VulnerabilityList
       :vulnerabilities="vulnerabilities"
-      :isLoading="auditResults.isLoading.value"
+      :is-loading="auditResults.isLoading.value"
       @fix="handleFixVulnerability"
       @view-details="handleViewDetails"
     />
@@ -148,11 +159,11 @@ function formatLastRun(date: Date | string | null): string {
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
       <AuditHistory
         :logs="auditLogs.data.value ?? []"
-        :isLoading="auditLogs.isLoading.value"
+        :is-loading="auditLogs.isLoading.value"
       />
       <FixHistory
         :logs="fixLogs.data.value ?? []"
-        :isLoading="fixLogs.isLoading.value"
+        :is-loading="fixLogs.isLoading.value"
       />
     </div>
 

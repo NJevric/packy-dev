@@ -182,11 +182,18 @@ const grouped = computed<DateGroup[]>(() => {
 })
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
-function formatLabel(label: string): string {
-  return label.replace(
-    /(\d+\.\d+[\d.]*[-.\w]*)/g,
-    '<code class="font-mono bg-muted rounded px-[3px] text-[11px]">$1</code>',
-  )
+function parseLabelParts(label: string): { text: string; isVersion: boolean }[] {
+  const parts: { text: string; isVersion: boolean }[] = []
+  const regex = /(\d+\.\d+[\d.]*[-.\w]*)/g
+  let last = 0
+  let match
+  while ((match = regex.exec(label)) !== null) {
+    if (match.index > last) parts.push({ text: label.slice(last, match.index), isVersion: false })
+    parts.push({ text: match[0], isVersion: true })
+    last = regex.lastIndex
+  }
+  if (last < label.length) parts.push({ text: label.slice(last), isVersion: false })
+  return parts
 }
 
 function setTypeFilter(v: ActivityType | 'all' | 'failed') {
@@ -207,72 +214,159 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
 <template>
   <div class="space-y-5">
     <div>
-      <h1 class="text-3xl font-bold tracking-tight">Activity</h1>
-      <p class="text-sm text-muted-foreground mt-1">Full history of operations and audit runs</p>
+      <h1 class="text-3xl font-bold tracking-tight">
+        Activity
+      </h1>
+      <p class="text-sm text-muted-foreground mt-1">
+        Full history of operations and audit runs
+      </p>
     </div>
 
     <!-- Stats cards -->
-    <div v-if="!isLoading && activities.length > 0" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-
+    <div
+      v-if="!isLoading && activities.length > 0"
+      class="grid grid-cols-2 lg:grid-cols-4 gap-3"
+    >
       <!-- Total events -->
       <div class="relative overflow-hidden rounded-xl border bg-card p-4 flex flex-col gap-0.5">
-        <p class="text-xs text-muted-foreground">Total events</p>
+        <p class="text-xs text-muted-foreground">
+          Total events
+        </p>
         <div class="flex items-baseline gap-2 mt-1">
           <span class="text-3xl font-bold">{{ activities.length }}</span>
-          <span v-if="recentCount" class="text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full px-1.5 py-0.5">+{{ recentCount }}</span>
+          <span
+            v-if="recentCount"
+            class="text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full px-1.5 py-0.5"
+          >+{{ recentCount }}</span>
         </div>
-        <p class="text-xs text-muted-foreground">last {{ activitySpanDays }} days</p>
+        <p class="text-xs text-muted-foreground">
+          last {{ activitySpanDays }} days
+        </p>
         <div class="absolute bottom-3 right-3 text-blue-500 opacity-60">
-          <svg width="64" height="28" viewBox="0 0 64 28" fill="none">
-            <path :d="sparklineArea(totalSparkline)" fill="currentColor" opacity="0.15" />
-            <path :d="sparklinePath(totalSparkline)" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <svg
+            width="64"
+            height="28"
+            viewBox="0 0 64 28"
+            fill="none"
+          >
+            <path
+              :d="sparklineArea(totalSparkline)"
+              fill="currentColor"
+              opacity="0.15"
+            />
+            <path
+              :d="sparklinePath(totalSparkline)"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </div>
       </div>
 
       <!-- Installs / updates -->
       <div class="relative overflow-hidden rounded-xl border bg-card p-4 flex flex-col gap-0.5">
-        <p class="text-xs text-muted-foreground">Installs / updates</p>
+        <p class="text-xs text-muted-foreground">
+          Installs / updates
+        </p>
         <div class="flex items-baseline gap-2 mt-1">
           <span class="text-3xl font-bold">{{ (stats.install ?? 0) + (stats.update ?? 0) }}</span>
         </div>
-        <p class="text-xs text-muted-foreground">{{ stats.install ?? 0 }} installs · {{ stats.update ?? 0 }} updates</p>
+        <p class="text-xs text-muted-foreground">
+          {{ stats.install ?? 0 }} installs · {{ stats.update ?? 0 }} updates
+        </p>
         <div class="absolute bottom-3 right-3 text-orange-500 opacity-60">
-          <svg width="64" height="28" viewBox="0 0 64 28" fill="none">
-            <path :d="sparklineArea(installUpdateSparkline)" fill="currentColor" opacity="0.15" />
-            <path :d="sparklinePath(installUpdateSparkline)" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <svg
+            width="64"
+            height="28"
+            viewBox="0 0 64 28"
+            fill="none"
+          >
+            <path
+              :d="sparklineArea(installUpdateSparkline)"
+              fill="currentColor"
+              opacity="0.15"
+            />
+            <path
+              :d="sparklinePath(installUpdateSparkline)"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </div>
       </div>
 
       <!-- Audit runs -->
       <div class="relative overflow-hidden rounded-xl border bg-card p-4 flex flex-col gap-0.5">
-        <p class="text-xs text-muted-foreground">Audit runs</p>
+        <p class="text-xs text-muted-foreground">
+          Audit runs
+        </p>
         <div class="flex items-baseline gap-2 mt-1">
           <span class="text-3xl font-bold">{{ (stats.audit ?? 0) + (stats['audit-log'] ?? 0) }}</span>
         </div>
         <p class="text-xs text-muted-foreground">
-          <template v-if="lastAuditAgo">last run · {{ lastAuditAgo }}</template>
-          <template v-else>no audit runs yet</template>
+          <template v-if="lastAuditAgo">
+            last run · {{ lastAuditAgo }}
+          </template>
+          <template v-else>
+            no audit runs yet
+          </template>
         </p>
         <div class="absolute bottom-3 right-3 text-blue-400 opacity-60">
-          <svg width="64" height="28" viewBox="0 0 64 28" fill="none">
-            <path :d="sparklineArea(auditSparkline)" fill="currentColor" opacity="0.15" />
-            <path :d="sparklinePath(auditSparkline)" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+          <svg
+            width="64"
+            height="28"
+            viewBox="0 0 64 28"
+            fill="none"
+          >
+            <path
+              :d="sparklineArea(auditSparkline)"
+              fill="currentColor"
+              opacity="0.15"
+            />
+            <path
+              :d="sparklinePath(auditSparkline)"
+              stroke="currentColor"
+              stroke-width="1.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
           </svg>
         </div>
       </div>
 
       <!-- Failed -->
       <div class="rounded-xl border bg-card p-4 flex flex-col gap-0.5">
-        <p class="text-xs text-muted-foreground">Failed</p>
+        <p class="text-xs text-muted-foreground">
+          Failed
+        </p>
         <div class="flex items-baseline gap-2 mt-1">
-          <span class="text-3xl font-bold" :class="(stats.failed ?? 0) > 0 ? 'text-destructive' : ''">{{ stats.failed ?? 0 }}</span>
+          <span
+            class="text-3xl font-bold"
+            :class="(stats.failed ?? 0) > 0 ? 'text-destructive' : ''"
+          >{{ stats.failed ?? 0 }}</span>
           <span
             v-if="(stats.failed ?? 0) === 0"
             class="inline-flex items-center gap-0.5 text-xs font-semibold bg-green-500/10 text-green-600 dark:text-green-400 rounded-full px-1.5 py-0.5"
           >
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 2v6M2 6l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 10 10"
+              fill="none"
+            ><path
+              d="M5 2v6M2 6l3 3 3-3"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            /></svg>
             0
           </span>
         </div>
@@ -280,14 +374,23 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
           <template v-if="failedByType.install || failedByType.audit">
             {{ failedByType.install }} install · {{ failedByType.audit }} audit
           </template>
-          <template v-else>no failures</template>
+          <template v-else>
+            no failures
+          </template>
         </p>
       </div>
     </div>
 
     <!-- Skeleton stats -->
-    <div v-else-if="isLoading" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-      <div v-for="i in 4" :key="i" class="rounded-xl border bg-card p-4 space-y-2">
+    <div
+      v-else-if="isLoading"
+      class="grid grid-cols-2 lg:grid-cols-4 gap-3"
+    >
+      <div
+        v-for="i in 4"
+        :key="i"
+        class="rounded-xl border bg-card p-4 space-y-2"
+      >
         <Skeleton class="h-3 w-20" />
         <Skeleton class="h-8 w-12" />
         <Skeleton class="h-3 w-28" />
@@ -296,7 +399,6 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
 
     <!-- Activity card -->
     <div class="rounded-xl border bg-card">
-
       <!-- Header + search + filters -->
       <div class="p-4 pb-0 space-y-3">
         <div class="flex items-center justify-between">
@@ -307,9 +409,24 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
         </div>
 
         <div class="relative">
-          <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" viewBox="0 0 16 16" fill="none">
-            <circle cx="6.5" cy="6.5" r="4.5" stroke="currentColor" stroke-width="1.5"/>
-            <path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <svg
+            class="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <circle
+              cx="6.5"
+              cy="6.5"
+              r="4.5"
+              stroke="currentColor"
+              stroke-width="1.5"
+            />
+            <path
+              d="M10.5 10.5L14 14"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+            />
           </svg>
           <Input
             v-model="search"
@@ -362,16 +479,26 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
 
       <!-- List -->
       <div class="p-4 pt-3">
-
         <!-- Loading -->
-        <div v-if="isLoading" class="space-y-6">
-          <div v-for="g in 2" :key="g" class="flex gap-6">
+        <div
+          v-if="isLoading"
+          class="space-y-6"
+        >
+          <div
+            v-for="g in 2"
+            :key="g"
+            class="flex gap-6"
+          >
             <div class="w-16 shrink-0 space-y-1 pt-1">
               <Skeleton class="h-2.5 w-10" />
               <Skeleton class="h-3 w-14" />
             </div>
             <div class="flex-1 space-y-4">
-              <div v-for="i in 4" :key="i" class="flex items-start gap-3">
+              <div
+                v-for="i in 4"
+                :key="i"
+                class="flex items-start gap-3"
+              >
                 <Skeleton class="mt-1.5 h-2 w-2 rounded-full flex-shrink-0" />
                 <div class="flex-1 space-y-1">
                   <Skeleton class="h-4 w-3/4" />
@@ -392,15 +519,23 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
         </div>
 
         <!-- Grouped items — stacked on mobile, two-column on desktop -->
-        <div v-else class="space-y-6">
-          <div v-for="group in grouped" :key="group.label" class="flex flex-col sm:flex-row sm:gap-8">
-
+        <div
+          v-else
+          class="space-y-6"
+        >
+          <div
+            v-for="group in grouped"
+            :key="group.label"
+            class="flex flex-col sm:flex-row sm:gap-8"
+          >
             <!-- Date header -->
             <div class="sm:w-20 sm:shrink-0 sm:text-right sm:pt-0.5 mb-2 sm:mb-0 flex items-baseline gap-1.5 sm:block">
               <p class="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60 leading-none">
                 {{ group.dayLabel }}
               </p>
-              <p class="text-xs text-muted-foreground sm:mt-0.5">{{ group.label }}</p>
+              <p class="text-xs text-muted-foreground sm:mt-0.5">
+                {{ group.label }}
+              </p>
             </div>
 
             <!-- Items column -->
@@ -414,8 +549,20 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
                   <div :class="['h-2 w-2 rounded-full', item.dotColor]" />
                 </div>
                 <div class="min-w-0 flex-1">
-                  <!-- eslint-disable-next-line vue/no-v-html -->
-                  <p class="text-sm leading-snug" v-html="formatLabel(item.label)" />
+                  <p class="text-sm leading-snug">
+                    <template
+                      v-for="(part, i) in parseLabelParts(item.label)"
+                      :key="i"
+                    >
+                      <code
+                        v-if="part.isVersion"
+                        class="font-mono bg-muted rounded px-[3px] text-[11px]"
+                      >{{ part.text }}</code>
+                      <template v-else>
+                        {{ part.text }}
+                      </template>
+                    </template>
+                  </p>
                   <div class="mt-0.5 flex items-center gap-1.5 flex-wrap">
                     <span
                       class="inline-flex items-center rounded-md border px-1.5 py-px text-[10px] font-medium"
@@ -439,11 +586,28 @@ function next() { if (currentPage.value < totalPages.value) currentPage.value++ 
         </div>
 
         <!-- Pagination -->
-        <div v-if="totalPages > 1" class="mt-6 flex items-center justify-between border-t pt-4">
+        <div
+          v-if="totalPages > 1"
+          class="mt-6 flex items-center justify-between border-t pt-4"
+        >
           <span class="text-sm text-muted-foreground">Page {{ currentPage }} of {{ totalPages }}</span>
           <div class="flex gap-2">
-            <Button variant="outline" size="sm" :disabled="currentPage === 1" @click="prev">Previous</Button>
-            <Button variant="outline" size="sm" :disabled="currentPage === totalPages" @click="next">Next</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              :disabled="currentPage === 1"
+              @click="prev"
+            >
+              Previous
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              :disabled="currentPage === totalPages"
+              @click="next"
+            >
+              Next
+            </Button>
           </div>
         </div>
       </div>

@@ -53,17 +53,25 @@ onUnmounted(() => {
 <template>
   <div class="min-h-[calc(100vh-64px)] flex flex-col items-center justify-center px-6 py-16">
     <div class="w-full max-w-xl space-y-8">
-
       <!-- Error code -->
       <div class="space-y-1">
-        <p class="text-xs font-mono text-muted-foreground uppercase tracking-widest">exit status</p>
-        <h1 class="text-8xl font-mono font-bold tracking-tight text-foreground leading-none">404</h1>
-        <p class="text-sm font-mono text-muted-foreground">package_not_found</p>
+        <p class="text-xs font-mono text-muted-foreground uppercase tracking-widest">
+          exit status
+        </p>
+        <h1 class="text-8xl font-mono font-bold tracking-tight text-foreground leading-none">
+          404
+        </h1>
+        <p class="text-sm font-mono text-muted-foreground">
+          package_not_found
+        </p>
       </div>
 
       <!-- Terminal block -->
       <div class="rounded-lg border bg-muted/50 p-4 font-mono text-sm space-y-0.5 overflow-hidden">
-        <template v-for="(line, i) in visibleLines" :key="i">
+        <template
+          v-for="(line, i) in visibleLines"
+          :key="i"
+        >
           <div
             :class="[
               'leading-relaxed whitespace-pre',
@@ -83,17 +91,23 @@ onUnmounted(() => {
 
       <!-- Message -->
       <div class="space-y-1">
-        <p class="text-sm text-foreground font-medium">This route doesn't exist in the registry.</p>
-        <p class="text-sm text-muted-foreground">The path you requested could not be resolved. It may have been moved or never existed.</p>
+        <p class="text-sm text-foreground font-medium">
+          This route doesn't exist in the registry.
+        </p>
+        <p class="text-sm text-muted-foreground">
+          The path you requested could not be resolved. It may have been moved or never existed.
+        </p>
       </div>
 
       <!-- Actions -->
       <div class="flex items-center gap-3">
-        <Button @click="router.push('/')" class="font-mono text-sm w-full">
+        <Button
+          class="font-mono text-sm w-full"
+          @click="router.push('/')"
+        >
           $ cd ~
         </Button>
       </div>
-
     </div>
   </div>
 </template>

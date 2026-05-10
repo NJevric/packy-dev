@@ -24,21 +24,34 @@ function getPackageManagerLabel(pm: string): string {
       <CardTitle>Project</CardTitle>
     </CardHeader>
     <CardContent>
-      <div v-if="isLoading" class="space-y-3">
+      <div
+        v-if="isLoading"
+        class="space-y-3"
+      >
         <Skeleton class="h-6 w-32" />
         <Skeleton class="h-4 w-48" />
       </div>
-      <div v-else-if="project" class="space-y-3">
+      <div
+        v-else-if="project"
+        class="space-y-3"
+      >
         <div>
-          <div class="text-xl font-bold">{{ project.name }}</div>
-          <div class="text-sm text-muted-foreground">v{{ project.version }}</div>
+          <div class="text-xl font-bold">
+            {{ project.name }}
+          </div>
+          <div class="text-sm text-muted-foreground">
+            v{{ project.version }}
+          </div>
         </div>
         <div class="flex items-center gap-2">
           <Badge variant="secondary">
             {{ getPackageManagerLabel(project.packageManager) }}
           </Badge>
         </div>
-        <div class="text-xs text-muted-foreground truncate" :title="project.path">
+        <div
+          class="text-xs text-muted-foreground truncate"
+          :title="project.path"
+        >
           {{ project.path }}
         </div>
       </div>

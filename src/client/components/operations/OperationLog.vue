@@ -63,7 +63,9 @@ function formatCommand(command: string): string {
   <Card class="h-full flex flex-col">
     <CardHeader class="pb-3">
       <div class="flex items-center justify-between">
-        <CardTitle class="text-lg">Operations</CardTitle>
+        <CardTitle class="text-lg">
+          Operations
+        </CardTitle>
         <Button
           v-if="store.completedOperations.length > 0"
           size="sm"
@@ -76,7 +78,10 @@ function formatCommand(command: string): string {
     </CardHeader>
     <CardContent class="flex-1 flex flex-col gap-4 overflow-hidden">
       <!-- Operation list -->
-      <div v-if="operations.length === 0" class="text-center py-8 text-muted-foreground">
+      <div
+        v-if="operations.length === 0"
+        class="text-center py-8 text-muted-foreground"
+      >
         No operations yet
       </div>
       <template v-else>
@@ -90,7 +95,10 @@ function formatCommand(command: string): string {
             @click="selectedOperationId = op.id"
           >
             {{ formatCommand(op.command) }}
-            <Badge :variant="getStatusBadge(op.status).variant" class="ml-1 text-xs">
+            <Badge
+              :variant="getStatusBadge(op.status).variant"
+              class="ml-1 text-xs"
+            >
               {{ getStatusBadge(op.status).text }}
             </Badge>
           </Button>
@@ -101,7 +109,10 @@ function formatCommand(command: string): string {
           ref="logContainer"
           class="flex-1 bg-muted rounded-lg p-4 font-mono text-sm overflow-auto"
         >
-          <div v-if="selectedOperation" class="mb-2 text-muted-foreground">
+          <div
+            v-if="selectedOperation"
+            class="mb-2 text-muted-foreground"
+          >
             $ {{ selectedOperation.command }}
           </div>
           <div
@@ -111,7 +122,9 @@ function formatCommand(command: string): string {
               'whitespace-pre-wrap',
               log.stream === 'stderr' ? 'text-destructive' : ''
             ]"
-          >{{ log.data }}</div>
+          >
+            {{ log.data }}
+          </div>
           <div
             v-if="selectedOperation?.status === 'running'"
             class="animate-pulse text-muted-foreground"

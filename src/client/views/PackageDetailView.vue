@@ -69,12 +69,21 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
     <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
       <div>
         <div class="flex items-center gap-3">
-          <Button variant="ghost" size="sm" @click="router.back()">
+          <Button
+            variant="ghost"
+            size="sm"
+            @click="router.back()"
+          >
             ← Back
           </Button>
         </div>
-        <h1 class="text-3xl font-bold tracking-tight mt-2">{{ packageName }}</h1>
-        <p v-if="registryInfo?.description" class="text-muted-foreground mt-1">
+        <h1 class="text-3xl font-bold tracking-tight mt-2">
+          {{ packageName }}
+        </h1>
+        <p
+          v-if="registryInfo?.description"
+          class="text-muted-foreground mt-1"
+        >
           {{ registryInfo.description }}
         </p>
       </div>
@@ -85,7 +94,10 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
         >
           Update to {{ packageData.latest }}
         </Button>
-        <Button variant="destructive" @click="handleRemove">
+        <Button
+          variant="destructive"
+          @click="handleRemove"
+        >
           Remove
         </Button>
       </div>
@@ -95,11 +107,19 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
     <div class="grid gap-4 md:grid-cols-3">
       <Card>
         <CardHeader class="pb-2">
-          <CardTitle class="text-sm font-medium">Installed Version</CardTitle>
+          <CardTitle class="text-sm font-medium">
+            Installed Version
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="packages.isLoading.value" class="h-8 w-20" />
-          <div v-else class="text-2xl font-bold">
+          <Skeleton
+            v-if="packages.isLoading.value"
+            class="h-8 w-20"
+          />
+          <div
+            v-else
+            class="text-2xl font-bold"
+          >
             {{ packageData?.current || '-' }}
           </div>
         </CardContent>
@@ -107,13 +127,24 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
 
       <Card>
         <CardHeader class="pb-2">
-          <CardTitle class="text-sm font-medium">Latest Version</CardTitle>
+          <CardTitle class="text-sm font-medium">
+            Latest Version
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="isRegistryLoading" class="h-8 w-20" />
-          <div v-else class="flex items-center gap-2">
+          <Skeleton
+            v-if="isRegistryLoading"
+            class="h-8 w-20"
+          />
+          <div
+            v-else
+            class="flex items-center gap-2"
+          >
             <span class="text-2xl font-bold">{{ registryInfo?.version || '-' }}</span>
-            <Badge v-if="packageData?.hasUpdate" :variant="badgeVariant">
+            <Badge
+              v-if="packageData?.hasUpdate"
+              :variant="badgeVariant"
+            >
               {{ badgeText }}
             </Badge>
           </div>
@@ -122,11 +153,20 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
 
       <Card>
         <CardHeader class="pb-2">
-          <CardTitle class="text-sm font-medium">Type</CardTitle>
+          <CardTitle class="text-sm font-medium">
+            Type
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <Skeleton v-if="packages.isLoading.value" class="h-8 w-24" />
-          <Badge v-else variant="outline" class="text-lg">
+          <Skeleton
+            v-if="packages.isLoading.value"
+            class="h-8 w-24"
+          />
+          <Badge
+            v-else
+            variant="outline"
+            class="text-lg"
+          >
             {{ packageData?.type === 'devDependency' ? 'Dev Dependency' : 'Dependency' }}
           </Badge>
         </CardContent>
@@ -140,21 +180,37 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
         <CardDescription>Data from npm registry</CardDescription>
       </CardHeader>
       <CardContent>
-        <Skeleton v-if="isRegistryLoading" class="h-32 w-full" />
-        <div v-else-if="registryInfo" class="space-y-4">
+        <Skeleton
+          v-if="isRegistryLoading"
+          class="h-32 w-full"
+        />
+        <div
+          v-else-if="registryInfo"
+          class="space-y-4"
+        >
           <div class="grid gap-4 md:grid-cols-2">
             <div v-if="registryInfo.license">
-              <div class="text-sm text-muted-foreground">License</div>
-              <div class="font-medium">{{ registryInfo.license }}</div>
+              <div class="text-sm text-muted-foreground">
+                License
+              </div>
+              <div class="font-medium">
+                {{ registryInfo.license }}
+              </div>
             </div>
 
             <div v-if="registryInfo.downloads">
-              <div class="text-sm text-muted-foreground">Weekly Downloads</div>
-              <div class="font-medium">{{ formatDownloads(registryInfo.downloads.weekly) }}</div>
+              <div class="text-sm text-muted-foreground">
+                Weekly Downloads
+              </div>
+              <div class="font-medium">
+                {{ formatDownloads(registryInfo.downloads.weekly) }}
+              </div>
             </div>
 
             <div v-if="registryInfo.homepage">
-              <div class="text-sm text-muted-foreground">Homepage</div>
+              <div class="text-sm text-muted-foreground">
+                Homepage
+              </div>
               <a
                 :href="registryInfo.homepage"
                 target="_blank"
@@ -166,7 +222,9 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
             </div>
 
             <div v-if="getRepoUrl(registryInfo.repository)">
-              <div class="text-sm text-muted-foreground">Repository</div>
+              <div class="text-sm text-muted-foreground">
+                Repository
+              </div>
               <a
                 :href="getRepoUrl(registryInfo.repository)!"
                 target="_blank"
@@ -179,7 +237,9 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
           </div>
 
           <div v-if="registryInfo.keywords?.length">
-            <div class="text-sm text-muted-foreground mb-2">Keywords</div>
+            <div class="text-sm text-muted-foreground mb-2">
+              Keywords
+            </div>
             <div class="flex flex-wrap gap-1">
               <Badge
                 v-for="keyword in registryInfo.keywords.slice(0, 10)"
@@ -191,7 +251,10 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
             </div>
           </div>
         </div>
-        <div v-else class="text-muted-foreground">
+        <div
+          v-else
+          class="text-muted-foreground"
+        >
           Unable to load package information from registry.
         </div>
       </CardContent>
@@ -199,10 +262,10 @@ function getRepoUrl(repo?: { type: string; url: string }): string | null {
 
     <ConfirmDialog
       :open="isRemoveDialogOpen"
-      @update:open="isRemoveDialogOpen = $event"
       title="Remove Package"
       :description="`Are you sure you want to remove ${packageName}? This action cannot be undone and you will be redirected to the dashboard.`"
       confirm-text="Remove"
+      @update:open="isRemoveDialogOpen = $event"
       @confirm="confirmRemove"
     />
 

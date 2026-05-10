@@ -87,17 +87,28 @@ function formatOutput(output: string | undefined): string {
       </CardTitle>
     </CardHeader>
     <CardContent>
-      <div v-if="isLoading" class="text-center py-8 text-muted-foreground">
+      <div
+        v-if="isLoading"
+        class="text-center py-8 text-muted-foreground"
+      >
         Loading fix history...
       </div>
 
-      <div v-else-if="formattedLogs.length === 0" class="text-center py-8 text-muted-foreground">
+      <div
+        v-else-if="formattedLogs.length === 0"
+        class="text-center py-8 text-muted-foreground"
+      >
         <Wrench class="h-12 w-12 mx-auto mb-3 opacity-50" />
         <p>No fix history yet</p>
-        <p class="text-sm">Fix vulnerabilities to see results here</p>
+        <p class="text-sm">
+          Fix vulnerabilities to see results here
+        </p>
       </div>
 
-      <div v-else class="space-y-3">
+      <div
+        v-else
+        class="space-y-3"
+      >
         <div
           v-for="log in formattedLogs.slice(0, 10)"
           :key="log.id"
@@ -124,10 +135,16 @@ function formatOutput(output: string | undefined): string {
           </div>
 
           <div class="flex flex-wrap gap-2 mt-2">
-            <Badge v-if="log.force" variant="destructive">
+            <Badge
+              v-if="log.force"
+              variant="destructive"
+            >
               Force update
             </Badge>
-            <Badge v-if="log.exitCode !== undefined" variant="outline">
+            <Badge
+              v-if="log.exitCode !== undefined"
+              variant="outline"
+            >
               Exit code: {{ log.exitCode }}
             </Badge>
           </div>
@@ -141,23 +158,42 @@ function formatOutput(output: string | undefined): string {
           </div>
 
           <!-- Show details button if there's output or error -->
-          <div v-if="log.output || log.error" class="mt-3">
+          <div
+            v-if="log.output || log.error"
+            class="mt-3"
+          >
             <button
-              @click="toggleExpanded(log.id)"
               class="flex items-center gap-1 text-sm text-primary hover:underline"
+              @click="toggleExpanded(log.id)"
             >
-              <component :is="isExpanded(log.id) ? ChevronDown : ChevronRight" class="h-4 w-4" />
+              <component
+                :is="isExpanded(log.id) ? ChevronDown : ChevronRight"
+                class="h-4 w-4"
+              />
               {{ isExpanded(log.id) ? 'Hide' : 'Show' }} details
             </button>
 
             <!-- Expanded details section -->
-            <div v-if="isExpanded(log.id)" class="mt-2 space-y-2">
-              <div v-if="log.output" class="p-3 bg-muted rounded-md">
-                <div class="text-xs font-medium text-muted-foreground mb-1">Output:</div>
+            <div
+              v-if="isExpanded(log.id)"
+              class="mt-2 space-y-2"
+            >
+              <div
+                v-if="log.output"
+                class="p-3 bg-muted rounded-md"
+              >
+                <div class="text-xs font-medium text-muted-foreground mb-1">
+                  Output:
+                </div>
                 <pre class="text-xs overflow-x-auto whitespace-pre-wrap">{{ formatOutput(log.output) }}</pre>
               </div>
-              <div v-if="log.error" class="p-3 bg-destructive/10 rounded-md">
-                <div class="text-xs font-medium text-destructive mb-1">Error:</div>
+              <div
+                v-if="log.error"
+                class="p-3 bg-destructive/10 rounded-md"
+              >
+                <div class="text-xs font-medium text-destructive mb-1">
+                  Error:
+                </div>
                 <pre class="text-xs overflow-x-auto whitespace-pre-wrap text-destructive">{{ formatOutput(log.error) }}</pre>
               </div>
             </div>

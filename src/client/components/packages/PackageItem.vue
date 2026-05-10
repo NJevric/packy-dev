@@ -37,18 +37,28 @@ const isVersionPickerOpen = ref(false)
     <div class="flex-1 min-w-0">
       <div class="flex items-center gap-2 flex-wrap">
         <span class="font-medium truncate">{{ package.name }}</span>
-        <Badge variant="outline" class="text-xs shrink-0">{{ typeLabel }}</Badge>
+        <Badge
+          variant="outline"
+          class="text-xs shrink-0"
+        >
+          {{ typeLabel }}
+        </Badge>
       </div>
       <div class="flex items-center gap-2 mt-1 flex-wrap">
         <span class="text-sm text-muted-foreground">{{ package.current }}</span>
         <template v-if="package.hasUpdate">
           <span class="text-muted-foreground">→</span>
           <span class="text-sm font-medium">{{ package.latest }}</span>
-          <Badge :variant="badgeVariant">{{ badgeText }}</Badge>
+          <Badge :variant="badgeVariant">
+            {{ badgeText }}
+          </Badge>
         </template>
       </div>
     </div>
-    <div class="flex items-center gap-2 shrink-0" @click.stop>
+    <div
+      class="flex items-center gap-2 shrink-0"
+      @click.stop
+    >
       <div class="flex items-center">
         <template v-if="package.hasUpdate">
           <Button
@@ -66,7 +76,17 @@ const isVersionPickerOpen = ref(false)
             title="Choose version"
             @click="isVersionPickerOpen = true"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ><path d="m6 9 6 6 6-6" /></svg>
           </Button>
         </template>
         <Button

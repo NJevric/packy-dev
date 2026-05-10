@@ -71,26 +71,40 @@ watch(
           class="shrink-0 h-4 w-4 rounded-full flex items-center justify-center"
           :class="latestOperation.status === 'failed' ? 'bg-destructive' : 'bg-primary'"
         >
-          <svg class="h-2.5 w-2.5 text-white" viewBox="0 0 10 10" fill="none">
+          <svg
+            class="h-2.5 w-2.5 text-white"
+            viewBox="0 0 10 10"
+            fill="none"
+          >
             <path
               v-if="latestOperation.status === 'completed'"
               d="M1.5 5L4 7.5L8.5 3"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             />
             <path
               v-else
               d="M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5"
-              stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
             />
           </svg>
         </div>
         <div class="flex-1 min-w-0">
-          <div class="text-sm font-medium truncate">{{ label }}</div>
+          <div class="text-sm font-medium truncate">
+            {{ label }}
+          </div>
           <div class="text-xs text-muted-foreground truncate">
             {{ latestOperation.command }}
           </div>
         </div>
-        <Badge :variant="badgeVariant" class="shrink-0">
+        <Badge
+          :variant="badgeVariant"
+          class="shrink-0"
+        >
           {{ latestOperation.status }}
         </Badge>
       </div>

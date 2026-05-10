@@ -30,7 +30,9 @@ const totalOutdated = computed(() => {
     <CardHeader>
       <div class="flex items-center justify-between">
         <div>
-          <CardTitle class="text-base font-semibold">Outdated Packages</CardTitle>
+          <CardTitle class="text-base font-semibold">
+            Outdated Packages
+          </CardTitle>
           <CardDescription>
             {{ totalOutdated }} package{{ totalOutdated !== 1 ? 's' : '' }} can be updated
           </CardDescription>
@@ -38,32 +40,57 @@ const totalOutdated = computed(() => {
       </div>
     </CardHeader>
     <CardContent>
-      <div v-if="isLoading" class="space-y-3">
-        <Skeleton v-for="i in 3" :key="i" class="h-12 w-full" />
+      <div
+        v-if="isLoading"
+        class="space-y-3"
+      >
+        <Skeleton
+          v-for="i in 3"
+          :key="i"
+          class="h-12 w-full"
+        />
       </div>
-      <div v-else-if="outdatedPackages.length === 0" class="text-center py-6 text-muted-foreground">
+      <div
+        v-else-if="outdatedPackages.length === 0"
+        class="text-center py-6 text-muted-foreground"
+      >
         All packages are up to date!
       </div>
-      <div v-else class="space-y-3">
+      <div
+        v-else
+        class="space-y-3"
+      >
         <div
           v-for="pkg in outdatedPackages"
           :key="pkg.name"
           class="flex items-center justify-between p-3 rounded-lg border gap-3"
         >
           <div class="space-y-1 min-w-0">
-            <div class="font-medium truncate">{{ pkg.name }}</div>
+            <div class="font-medium truncate">
+              {{ pkg.name }}
+            </div>
             <div class="text-sm text-muted-foreground">
               {{ pkg.current }} → {{ pkg.latest }}
             </div>
           </div>
           <div class="flex items-center gap-2 shrink-0">
-            <VersionBadge :current="pkg.current" :latest="pkg.latest" />
-            <Button size="sm" variant="outline" @click="emit('update', pkg.name)">
+            <VersionBadge
+              :current="pkg.current"
+              :latest="pkg.latest"
+            />
+            <Button
+              size="sm"
+              variant="outline"
+              @click="emit('update', pkg.name)"
+            >
               Update
             </Button>
           </div>
         </div>
-        <div v-if="totalOutdated > 5" class="text-center text-sm text-muted-foreground pt-2">
+        <div
+          v-if="totalOutdated > 5"
+          class="text-center text-sm text-muted-foreground pt-2"
+        >
           And {{ totalOutdated - 5 }} more...
         </div>
       </div>

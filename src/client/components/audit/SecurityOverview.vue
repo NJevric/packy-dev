@@ -18,31 +18,51 @@ const lowCount = computed(() => props.metadata?.vulnerabilities.low ?? 0)
 
 <template>
   <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-    <OverviewCard title="Total Vulnerabilities" :value="totalVulnerabilities" :isLoading="isLoading">
+    <OverviewCard
+      title="Total Vulnerabilities"
+      :value="totalVulnerabilities"
+      :is-loading="isLoading"
+    >
       <template #icon>
         <ShieldAlert class="h-4 w-4 text-muted-foreground" />
       </template>
     </OverviewCard>
 
-    <OverviewCard title="Critical" :value="criticalCount" :isLoading="isLoading">
+    <OverviewCard
+      title="Critical"
+      :value="criticalCount"
+      :is-loading="isLoading"
+    >
       <template #icon>
         <AlertTriangle class="h-4 w-4 text-red-600" />
       </template>
     </OverviewCard>
 
-    <OverviewCard title="High" :value="highCount" :isLoading="isLoading">
+    <OverviewCard
+      title="High"
+      :value="highCount"
+      :is-loading="isLoading"
+    >
       <template #icon>
         <AlertTriangle class="h-4 w-4 text-orange-600" />
       </template>
     </OverviewCard>
 
-    <OverviewCard title="Moderate" :value="moderateCount" :isLoading="isLoading">
+    <OverviewCard
+      title="Moderate"
+      :value="moderateCount"
+      :is-loading="isLoading"
+    >
       <template #icon>
         <AlertCircle class="h-4 w-4 text-yellow-600" />
       </template>
     </OverviewCard>
 
-    <OverviewCard title="Low" :value="lowCount" :isLoading="isLoading">
+    <OverviewCard
+      title="Low"
+      :value="lowCount"
+      :is-loading="isLoading"
+    >
       <template #icon>
         <Info class="h-4 w-4 text-blue-600" />
       </template>

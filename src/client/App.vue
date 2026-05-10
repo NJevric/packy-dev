@@ -4,7 +4,10 @@ import { Package, ShieldAlert, Layers, Activity } from 'lucide-vue-next'
 </script>
 
 <template>
-  <div class="min-h-screen" style="background-color: #fafbfc">
+  <div
+    class="min-h-screen"
+    style="background-color: #fafbfc"
+  >
     <header class="border-b">
       <div class="container mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
         <div class="flex items-center gap-2.5">

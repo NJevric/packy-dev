@@ -62,7 +62,10 @@ const hasMore = computed(() =>
             @click="setFilter(f.value)"
           >
             {{ f.label }}
-            <Badge variant="secondary" class="ml-1">
+            <Badge
+              variant="secondary"
+              class="ml-1"
+            >
               {{ counts[f.countKey] }}
             </Badge>
           </Button>
@@ -71,10 +74,20 @@ const hasMore = computed(() =>
     </template>
 
     <!-- Package list -->
-    <div v-if="isLoading" class="space-y-3">
-      <Skeleton v-for="i in (limit ?? 5)" :key="i" class="h-20 w-full" />
+    <div
+      v-if="isLoading"
+      class="space-y-3"
+    >
+      <Skeleton
+        v-for="i in (limit ?? 5)"
+        :key="i"
+        class="h-20 w-full"
+      />
     </div>
-    <div v-else-if="displayedPackages.length === 0" class="text-center py-12 text-muted-foreground">
+    <div
+      v-else-if="displayedPackages.length === 0"
+      class="text-center py-12 text-muted-foreground"
+    >
       <template v-if="query">
         No packages found matching "{{ query }}"
       </template>
@@ -82,7 +95,10 @@ const hasMore = computed(() =>
         No packages to display
       </template>
     </div>
-    <div v-else class="space-y-2">
+    <div
+      v-else
+      class="space-y-2"
+    >
       <PackageItem
         v-for="pkg in displayedPackages"
         :key="pkg.name"
@@ -92,8 +108,15 @@ const hasMore = computed(() =>
         @remove="emit('remove', $event)"
         @select="emit('select', $event)"
       />
-      <div v-if="hasMore" class="pt-1">
-        <Button variant="outline" class="w-full" @click="emit('viewAll')">
+      <div
+        v-if="hasMore"
+        class="pt-1"
+      >
+        <Button
+          variant="outline"
+          class="w-full"
+          @click="emit('viewAll')"
+        >
           View all {{ packages.length }} packages
         </Button>
       </div>
