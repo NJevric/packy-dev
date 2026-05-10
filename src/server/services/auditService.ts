@@ -2,8 +2,32 @@ import type {
   AuditReport,
   AuditMetadata,
   Vulnerability,
+  VulnerabilityDetail,
+  FixInfo,
+  CVSSInfo,
   PackageManager,
 } from '@shared/types'
+
+interface NpmAuditRawVuln {
+  severity: string
+  isDirect: boolean
+  via: Array<string | VulnerabilityDetail>
+  effects: string[]
+  range: string
+  nodes: string[]
+  fixAvailable: boolean | FixInfo
+}
+
+interface NpmAuditRawData {
+  metadata?: {
+    vulnerabilities?: Partial<AuditMetadata['vulnerabilities']>
+    dependencies?: number
+    devDependencies?: number
+    optionalDependencies?: number
+    totalDependencies?: number
+  }
+  vulnerabilities?: Record<string, NpmAuditRawVuln>
+}
 
 // In-memory cache for audit results
 let cachedReport: AuditReport | null = null
@@ -27,7 +51,7 @@ export function parseAuditOutput(stdout: string, packageManager: PackageManager)
 /**
  * Transforms npm audit v2 JSON format
  */
-function transformNpmAuditV2(data: any, packageManager: PackageManager): AuditReport {
+function transformNpmAuditV2(data: NpmAuditRawData, packageManager: PackageManager): AuditReport {
   // Extract metadata
   const metadata: AuditMetadata = {
     vulnerabilities: {
@@ -48,14 +72,12 @@ function transformNpmAuditV2(data: any, packageManager: PackageManager): AuditRe
   const vulnerabilities: Vulnerability[] = []
 
   if (data.vulnerabilities) {
-    for (const [packageName, vulnData] of Object.entries(data.vulnerabilities)) {
-      const vuln = vulnData as any
-
+    for (const [packageName, vuln] of Object.entries(data.vulnerabilities)) {
       // Extract advisory details from via array
       let title: string | undefined
       let url: string | undefined
       let cwe: string[] | undefined
-      let cvss: any
+      let cvss: CVSSInfo | undefined
 
       if (Array.isArray(vuln.via)) {
         for (const viaItem of vuln.via) {
@@ -103,7 +125,7 @@ function transformNpmAuditV2(data: any, packageManager: PackageManager): AuditRe
 /**
  * Parses fixAvailable field which can be boolean or object
  */
-function parseFixAvailable(fixAvailable: any): boolean | any {
+function parseFixAvailable(fixAvailable: boolean | FixInfo): boolean | FixInfo {
   if (typeof fixAvailable === 'boolean') {
     return fixAvailable
   }

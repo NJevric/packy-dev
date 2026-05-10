@@ -2,9 +2,25 @@ import pluginVue from 'eslint-plugin-vue'
 import tseslint from 'typescript-eslint'
 import vueParser from 'vue-eslint-parser'
 
+const tsRules = tseslint.configs.recommended.reduce((acc, c) => ({ ...acc, ...c.rules }), {})
+
+const ignoreUnderscoreVars = {
+  '@typescript-eslint/no-unused-vars': ['error', {
+    varsIgnorePattern: '^_',
+    argsIgnorePattern: '^_',
+    caughtErrorsIgnorePattern: '^_',
+  }],
+}
+
 export default [
   { ignores: ['dist/**', 'node_modules/**'] },
   ...pluginVue.configs['flat/recommended'],
+  {
+    files: ['src/client/components/ui/**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+    },
+  },
   {
     files: ['**/*.ts'],
     languageOptions: {
@@ -12,7 +28,8 @@ export default [
     },
     plugins: { '@typescript-eslint': tseslint.plugin },
     rules: {
-      ...tseslint.configs.recommended.reduce((acc, c) => ({ ...acc, ...c.rules }), {}),
+      ...tsRules,
+      ...ignoreUnderscoreVars,
     },
   },
   {
@@ -26,7 +43,8 @@ export default [
     },
     plugins: { '@typescript-eslint': tseslint.plugin },
     rules: {
-      ...tseslint.configs.recommended.reduce((acc, c) => ({ ...acc, ...c.rules }), {}),
+      ...tsRules,
+      ...ignoreUnderscoreVars,
     },
   },
 ]

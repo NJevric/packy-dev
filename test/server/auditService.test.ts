@@ -7,6 +7,7 @@ import {
   setCachedAuditResults,
   clearCache,
 } from '../../src/server/services/auditService.js'
+import type { FixInfo } from '../../src/shared/types.js'
 
 const npmAuditFixture = {
   auditReportVersion: 2,
@@ -66,7 +67,7 @@ describe('parseAuditOutput', () => {
     const report = parseAuditOutput(JSON.stringify(npmAuditFixture), 'npm')
     const fix = report.vulnerabilities[0].fixAvailable
     expect(typeof fix).toBe('object')
-    expect((fix as any).isSemVerMajor).toBe(false)
+    expect((fix as FixInfo).isSemVerMajor).toBe(false)
   })
 })
 
