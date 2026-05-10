@@ -11,7 +11,7 @@ Run `packy` in any Node.js project to open a fully responsive dashboard for inst
 ## Features
 
 - **Dashboard** — stats bar showing total packages, outdated count, vulnerability summary, node_modules install size, and last audit time with sparkline
-- **Package management** — view all dependencies with current vs. latest versions, install, remove, and update individual packages
+- **Package management** — view all dependencies with current vs. latest versions, install, remove, and update individual packages; pick any specific version from the full registry history before installing
 - **Update All** — one-click bulk update for all outdated packages with live progress
 - **Package detail** — per-package view with npm registry info: version history, license, weekly downloads, homepage, repository, and keywords
 - **Security audit** — run `npm audit` from the browser with severity breakdown (critical / high / moderate / low / info)

@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.3.3] — 2026-05-10
+
+### Added
+- **Activity page** — full paginated activity log with search, type filter (install / update / remove / audit), actor filter, and per-entry stats
+- **Version picker** — choose any specific version from the full npm registry history before installing a package
+- **404 Not Found page** — terminal-style animated error output for unmatched routes
+
+### Fixed
+- Removed broken logo asset reference
+
+### Changed
+- Dependency updates
+
+---
+
+## [1.1.2] — 2026-05-08
+
+### Added
+- **Update All** — one-click bulk update for all outdated packages with live progress streaming
+- Dashboard package list capped to most relevant entries for a cleaner overview
+
+### Changed
+- Responsive layout improvements across all views
+
+---
+
+## [1.0.1] — 2026-05-08
+
+### Fixed
+- Tailwind CSS v3 → v4 syntax migration
+- TypeScript type errors
+
+---
+
 ## [1.0.0] — 2026-05-08
 
 ### Added
