@@ -20,6 +20,21 @@ export function useRegistry(packageName: MaybeRef<string | undefined>) {
   return registry
 }
 
+export function usePackageVersions(packageName: MaybeRef<string | undefined>) {
+  const api = useApi()
+
+  return useQuery({
+    queryKey: ['registry-versions', packageName],
+    queryFn: () => {
+      const name = unref(packageName)
+      if (!name) throw new Error('No package name provided')
+      return api.get<string[]>(`/registry/${encodeURIComponent(name)}/versions`)
+    },
+    enabled: () => !!unref(packageName),
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
 export function useRegistryBatch(packageNames: MaybeRef<string[]>) {
   const api = useApi()
 
