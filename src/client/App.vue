@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterView, RouterLink } from 'vue-router'
 import { Package, ShieldAlert, Layers, Activity } from 'lucide-vue-next'
-import PackyLogo from './components/PackyLogo.vue'
 </script>
 
 <template>
