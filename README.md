@@ -4,6 +4,14 @@
   <img src="https://raw.githubusercontent.com/njevric/packy-dev/main/public/banner.svg" alt="Packy — modern browser UI for npm package management" width="900"/>
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/packydash"><img src="https://img.shields.io/npm/v/packydash" alt="npm version"/></a>
+  <a href="https://www.npmjs.com/package/packydash"><img src="https://img.shields.io/npm/dm/packydash" alt="npm downloads"/></a>
+  <a href="https://github.com/NJevric/packy-dev/actions/workflows/ci.yml"><img src="https://github.com/NJevric/packy-dev/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"/></a>
+  <a href="https://www.npmjs.com/package/packydash"><img src="https://img.shields.io/node/v/packydash" alt="Node version"/></a>
+</p>
+
 Modern browser UI for managing npm dependencies and packages.
 
 Run `packy` in any Node.js project to open a fully responsive dashboard for installing, removing, and updating packages — with real-time output streaming and a built-in security auditor.
