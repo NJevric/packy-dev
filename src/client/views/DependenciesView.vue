@@ -25,6 +25,10 @@ function handleUpdatePackage(name: string) {
   updatePackage.mutate({ name })
 }
 
+function handleUpdatePackageVersion(name: string, version: string) {
+  updatePackage.mutate({ name, version })
+}
+
 function handleRemovePackage(name: string) {
   packageToRemove.value = name
   isRemoveDialogOpen.value = true
@@ -65,6 +69,7 @@ function handleSelectPackage(name: string) {
         :packages="packageList"
         :is-loading="isLoading"
         @update="handleUpdatePackage"
+        @update-version="handleUpdatePackageVersion"
         @remove="handleRemovePackage"
         @select="handleSelectPackage"
       />

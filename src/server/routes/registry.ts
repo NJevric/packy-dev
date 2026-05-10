@@ -1,8 +1,20 @@
 import { Router, type Request, type Response } from 'express'
-import { getPackageInfo, getDownloadCounts } from '../services/registryClient.js'
+import { getPackageInfo, getDownloadCounts, getPackageVersions } from '../services/registryClient.js'
 
 export function createRegistryRouter(): Router {
   const router = Router()
+
+  // GET /api/registry/:name/versions - Get all versions for a package
+  router.get('/:name/versions', async (req: Request<{ name: string }>, res: Response) => {
+    try {
+      const packageName = decodeURIComponent(req.params.name)
+      const versions = await getPackageVersions(packageName)
+      res.json({ success: true, data: versions })
+    } catch (error) {
+      console.error('Error getting package versions:', error)
+      res.status(500).json({ success: false, error: 'Failed to get package versions' })
+    }
+  })
 
   // GET /api/registry/:name - Get package info from npm registry
   router.get('/:name', async (req: Request<{ name: string }>, res: Response) => {

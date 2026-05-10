@@ -62,10 +62,10 @@
     "express": "^5.2.1",
     "get-port": "^7.2.0",
     "open": "^11.0.0",
-    "semver": "^7.7.4"
+    "semver": "^7.8.0"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.2.4",
+    "@tailwindcss/postcss": "^4.3.0",
     "@tanstack/vue-query": "^5.100.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
@@ -84,8 +84,8 @@
     "pinia": "^3.0.4",
     "postcss": "^8.5.14",
     "radix-vue": "^1.9.17",
-    "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.4",
+    "tailwind-merge": "^3.6.0",
+    "tailwindcss": "^4.3.0",
     "tailwindcss-animate": "^1.0.7",
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
