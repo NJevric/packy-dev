@@ -16,6 +16,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   update: [name: string]
+  'update-version': [name: string, version: string]
   remove: [name: string]
   select: [name: string]
   viewAll: []
@@ -87,6 +88,7 @@ const hasMore = computed(() =>
         :key="pkg.name"
         :package="pkg"
         @update="emit('update', $event)"
+        @update-version="(name, version) => emit('update-version', name, version)"
         @remove="emit('remove', $event)"
         @select="emit('select', $event)"
       />

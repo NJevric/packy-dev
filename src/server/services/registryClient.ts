@@ -1,3 +1,4 @@
+import semver from 'semver'
 import type { RegistryInfo } from '@shared/types'
 
 const NPM_REGISTRY = 'https://registry.npmjs.org'
@@ -137,6 +138,45 @@ export async function getDownloadCounts(packageName: string): Promise<{ weekly: 
   } catch (error) {
     console.error(`Failed to fetch download counts for ${packageName}:`, error)
     return null
+  }
+}
+
+// Cache for all-versions lookups
+const versionsCache = new Map<string, { versions: string[]; timestamp: number }>()
+
+/**
+ * Fetches all published versions of a package from the npm registry, sorted descending.
+ */
+export async function getPackageVersions(packageName: string): Promise<string[]> {
+  const cached = versionsCache.get(packageName)
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.versions
+  }
+
+  try {
+    const encodedName = packageName.startsWith('@')
+      ? `@${encodeURIComponent(packageName.slice(1))}`
+      : encodeURIComponent(packageName)
+
+    const response = await fetch(`${NPM_REGISTRY}/${encodedName}`, {
+      headers: { Accept: 'application/json' },
+    })
+
+    if (!response.ok) {
+      if (response.status === 404) return []
+      throw new Error(`Registry returned ${response.status}`)
+    }
+
+    const data = (await response.json()) as { versions: Record<string, unknown> }
+    const versions = Object.keys(data.versions)
+      .filter(v => semver.valid(v))
+      .sort((a, b) => semver.rcompare(a, b))
+
+    versionsCache.set(packageName, { versions, timestamp: Date.now() })
+    return versions
+  } catch (error) {
+    console.error(`Failed to fetch versions for ${packageName}:`, error)
+    return []
   }
 }
 

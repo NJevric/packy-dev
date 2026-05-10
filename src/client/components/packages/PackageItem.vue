@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useVersionCompare } from '@/composables/useVersionCompare'
+import VersionPickerDialog from './VersionPickerDialog.vue'
 import type { Package } from '@shared/types'
 
 const props = defineProps<{
@@ -11,6 +12,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   update: [name: string]
+  'update-version': [name: string, version: string]
   remove: [name: string]
   select: [name: string]
 }>()
@@ -23,6 +25,8 @@ const { badgeVariant, badgeText } = useVersionCompare(
 const typeLabel = computed(() => {
   return props.package.type === 'devDependency' ? 'dev' : 'prod'
 })
+
+const isVersionPickerOpen = ref(false)
 </script>
 
 <template>
@@ -45,14 +49,35 @@ const typeLabel = computed(() => {
       </div>
     </div>
     <div class="flex items-center gap-2 shrink-0" @click.stop>
-      <Button
-        v-if="package.hasUpdate"
-        size="sm"
-        variant="outline"
-        @click="emit('update', package.name)"
-      >
-        Update
-      </Button>
+      <div class="flex items-center">
+        <template v-if="package.hasUpdate">
+          <Button
+            size="sm"
+            variant="outline"
+            class="rounded-r-none border-r-0"
+            @click="emit('update', package.name)"
+          >
+            Update
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            class="rounded-l-none px-2"
+            title="Choose version"
+            @click="isVersionPickerOpen = true"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+          </Button>
+        </template>
+        <Button
+          v-else
+          size="sm"
+          variant="outline"
+          @click="isVersionPickerOpen = true"
+        >
+          Choose version
+        </Button>
+      </div>
       <Button
         size="sm"
         variant="ghost"
@@ -63,4 +88,13 @@ const typeLabel = computed(() => {
       </Button>
     </div>
   </div>
+
+  <VersionPickerDialog
+    :open="isVersionPickerOpen"
+    :package-name="package.name"
+    :current-version="package.current"
+    :latest-version="package.latest"
+    @update:open="isVersionPickerOpen = $event"
+    @confirm="emit('update-version', package.name, $event)"
+  />
 </template>
