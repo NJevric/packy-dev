@@ -3,13 +3,14 @@ import type {
   AuditMetadata,
   Vulnerability,
   VulnerabilityDetail,
+  VulnerabilitySeverity,
   FixInfo,
   CVSSInfo,
   PackageManager,
 } from '@shared/types'
 
 interface NpmAuditRawVuln {
-  severity: string
+  severity: VulnerabilitySeverity
   isDirect: boolean
   via: Array<string | VulnerabilityDetail>
   effects: string[]
