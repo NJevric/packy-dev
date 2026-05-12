@@ -23,7 +23,7 @@ export const operationEvents = new EventEmitter()
  * Runs a shell command and streams output via events
  */
 export function runCommand(
-  command: string,
+  argv: string[],
   cwd: string,
   type: Operation['type'],
   packageName?: string,
@@ -31,6 +31,7 @@ export function runCommand(
   scriptName?: string
 ): string {
   const operationId = generateOperationId()
+  const command = argv.join(' ')
 
   const operation: Operation = {
     id: operationId,
@@ -47,34 +48,31 @@ export function runCommand(
 
   // Start operation asynchronously
   setImmediate(() => {
-    executeCommand(operationId, command, cwd)
+    executeCommand(operationId, argv, cwd)
   })
 
   return operationId
 }
 
-async function executeCommand(operationId: string, command: string, cwd: string): Promise<void> {
+async function executeCommand(operationId: string, argv: string[], cwd: string): Promise<void> {
   const operation = activeOperations.get(operationId)
   if (!operation) return
 
   operation.status = 'running'
 
+  const [cmd, ...args] = argv
+
   // Emit start event
   const startEvent: OperationEvent = {
     type: 'start',
     operationId,
-    command,
+    command: operation.command,
     operationType: operation.type,
     packageName: operation.packageName,
     scriptName: operation.scriptName,
     fromVersion: operation.fromVersion,
   }
   operationEvents.emit('event', startEvent)
-
-  // Parse command into parts
-  const parts = command.split(' ')
-  const cmd = parts[0]
-  const args = parts.slice(1)
 
   let childProcess: ChildProcess
 

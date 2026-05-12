@@ -58,7 +58,7 @@ export function createScriptsRouter(projectPath: string): Router {
       }
 
       const operationId = runCommand(
-        `npm run ${name}`,
+        ['npm', 'run', name],
         projectPath,
         'script',
         undefined,
