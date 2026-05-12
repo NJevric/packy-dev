@@ -81,8 +81,7 @@ export function createAuditRouter(projectPath: string): Router {
         return
       }
 
-      const command = getAuditCommand(packageManager)
-      const operationId = runCommand(command, projectPath, 'audit')
+      const operationId = runCommand(getAuditCommand(packageManager), projectPath, 'audit')
 
       // Accumulate stdout from the operation event stream directly — no second spawn needed
       let stdout = ''
@@ -169,11 +168,11 @@ export function createAuditRouter(projectPath: string): Router {
         return
       }
 
-      const command = getAuditFixCommand(packageManager, force, packageName)
-      console.log('[AUDIT FIX] Running command:', command)
+      const auditFixArgv = getAuditFixCommand(packageManager, force, packageName)
+      console.log('[AUDIT FIX] Running command:', auditFixArgv.join(' '))
       console.log('[AUDIT FIX] Force:', force, 'Package:', packageName)
 
-      const operationId = runCommand(command, projectPath, 'audit-fix', packageName)
+      const operationId = runCommand(auditFixArgv, projectPath, 'audit-fix', packageName)
 
       // Log the fix attempt
       addFixLog(projectPath, packageName, force, operationId)

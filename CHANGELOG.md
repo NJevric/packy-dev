@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.7.0] — 2026-05-13
+
+### Added
+- **Unused dependency detection** — powered by `depcheck`; surfaces packages listed in `package.json` that are not imported anywhere in the project, shown in a dedicated panel
+- **Smart filters panel** — contextual filter chips that adapt to the current package list (e.g. unused, outdated, dev-only)
+
+### Fixed
+- CodeQL static-analysis alert
+
+---
+
+## [1.5.0] — 2026-05-12
+
+### Added
+- **Script runner** — dedicated Scripts view for running any `package.json` script from the browser with live streaming output and per-script run history
+- **Dark mode** — system-aware theme with manual toggle; preference persisted across sessions
+- **CI / CodeQL workflows** — GitHub Actions pipeline for lint, typecheck, and build; CodeQL security scanning on every push and PR
+
+---
+
 ## [1.3.3] — 2026-05-10
 
 ### Added

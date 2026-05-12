@@ -205,16 +205,16 @@ export function clearCache(): void {
 /**
  * Gets the audit command for a package manager
  */
-export function getAuditCommand(packageManager: PackageManager): string {
+export function getAuditCommand(packageManager: PackageManager): string[] {
   switch (packageManager) {
     case 'npm':
-      return 'npm audit --json'
+      return ['npm', 'audit', '--json']
     case 'yarn':
-      return 'yarn audit --json'
+      return ['yarn', 'audit', '--json']
     case 'pnpm':
-      return 'pnpm audit --json'
+      return ['pnpm', 'audit', '--json']
     default:
-      return 'npm audit --json'
+      return ['npm', 'audit', '--json']
   }
 }
 
@@ -225,29 +225,29 @@ export function getAuditFixCommand(
   packageManager: PackageManager,
   force: boolean = false,
   packageName?: string
-): string {
+): string[] {
   if (packageName) {
     // Fix specific package by updating it
     switch (packageManager) {
       case 'npm':
-        return `npm update ${packageName}`
+        return ['npm', 'update', packageName]
       case 'yarn':
-        return `yarn upgrade ${packageName}`
+        return ['yarn', 'upgrade', packageName]
       case 'pnpm':
-        return `pnpm update ${packageName}`
+        return ['pnpm', 'update', packageName]
     }
   }
 
   // Fix all vulnerabilities
   switch (packageManager) {
     case 'npm':
-      return force ? 'npm audit fix --force' : 'npm audit fix'
+      return force ? ['npm', 'audit', 'fix', '--force'] : ['npm', 'audit', 'fix']
     case 'yarn':
       // yarn audit fix doesn't exist; npx yarn-audit-fix is the community equivalent
-      return 'npx yarn-audit-fix@10.1.1'
+      return ['npx', 'yarn-audit-fix@10.1.1']
     case 'pnpm':
-      return 'pnpm audit fix'
+      return ['pnpm', 'audit', 'fix']
     default:
-      return force ? 'npm audit fix --force' : 'npm audit fix'
+      return force ? ['npm', 'audit', 'fix', '--force'] : ['npm', 'audit', 'fix']
   }
 }

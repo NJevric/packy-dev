@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import PackageList from '@/components/packages/PackageList.vue'
 import OutdatedCard from '@/components/dashboard/OutdatedCard.vue'
+import DepcheckPanel from '@/components/packages/DepcheckPanel.vue'
 import OperationToast from '@/components/operations/OperationToast.vue'
 import { ConfirmDialog } from '@/components/ui/confirm-dialog'
 import { Button } from '@/components/ui/button'
@@ -75,11 +76,14 @@ function handleSelectPackage(name: string) {
         @select="handleSelectPackage"
       />
 
-      <OutdatedCard
-        :packages="packageList"
-        :is-loading="isLoading"
-        @update="handleUpdatePackage"
-      />
+      <div class="space-y-6">
+        <OutdatedCard
+          :packages="packageList"
+          :is-loading="isLoading"
+          @update="handleUpdatePackage"
+        />
+        <DepcheckPanel @remove="handleRemovePackage" />
+      </div>
     </div>
 
     <ConfirmDialog

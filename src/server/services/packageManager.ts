@@ -45,15 +45,15 @@ export function getInstallCommand(
 export function getUninstallCommand(
   pm: PackageManager,
   packageName: string
-): string {
+): string[] {
   switch (pm) {
     case 'pnpm':
-      return `pnpm remove ${packageName}`
+      return ['pnpm', 'remove', packageName]
     case 'yarn':
-      return `yarn remove ${packageName}`
+      return ['yarn', 'remove', packageName]
     case 'npm':
     default:
-      return `npm uninstall ${packageName}`
+      return ['npm', 'uninstall', packageName]
   }
 }
 
@@ -64,34 +64,34 @@ export function getUpdateCommand(
   pm: PackageManager,
   packageName: string,
   version?: string
-): string {
+): string[] {
   const pkg = version ? `${packageName}@${version}` : `${packageName}@latest`
 
   switch (pm) {
     case 'pnpm':
-      return `pnpm add ${pkg}`
+      return ['pnpm', 'add', pkg]
     case 'yarn':
-      return `yarn add ${pkg}`
+      return ['yarn', 'add', pkg]
     case 'npm':
     default:
-      return `npm install ${pkg}`
+      return ['npm', 'install', pkg]
   }
 }
 
 /**
  * Returns a command to update all given packages to latest
  */
-export function getUpdateAllCommand(pm: PackageManager, packageNames: string[]): string {
-  const pkgs = packageNames.map((name) => `${name}@latest`).join(' ')
+export function getUpdateAllCommand(pm: PackageManager, packageNames: string[]): string[] {
+  const pkgs = packageNames.map((name) => `${name}@latest`)
 
   switch (pm) {
     case 'pnpm':
-      return `pnpm add ${pkgs}`
+      return ['pnpm', 'add', ...pkgs]
     case 'yarn':
-      return `yarn add ${pkgs}`
+      return ['yarn', 'add', ...pkgs]
     case 'npm':
     default:
-      return `npm install ${pkgs}`
+      return ['npm', 'install', ...pkgs]
   }
 }
 

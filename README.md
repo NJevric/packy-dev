@@ -4,6 +4,14 @@
   <img src="https://raw.githubusercontent.com/njevric/packy-dev/main/public/banner.svg" alt="Packy — modern browser UI for npm package management" width="900"/>
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/packydash"><img src="https://img.shields.io/npm/v/packydash" alt="npm version"/></a>
+  <a href="https://www.npmjs.com/package/packydash"><img src="https://img.shields.io/npm/dm/packydash" alt="npm downloads"/></a>
+  <a href="https://github.com/NJevric/packy-dev/actions/workflows/ci.yml"><img src="https://github.com/NJevric/packy-dev/actions/workflows/ci.yml/badge.svg" alt="CI"/></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"/></a>
+  <a href="https://www.npmjs.com/package/packydash"><img src="https://img.shields.io/node/v/packydash" alt="Node version"/></a>
+</p>
+
 Modern browser UI for managing npm dependencies and packages.
 
 Run `packy` in any Node.js project to open a fully responsive dashboard for installing, removing, and updating packages — with real-time output streaming and a built-in security auditor.
@@ -20,6 +28,10 @@ Run `packy` in any Node.js project to open a fully responsive dashboard for inst
 - **Activity feed** — timeline of recent installs, updates, removals, and audits across sessions
 - **Real-time streaming** — command output streamed live to the browser via SSE
 - **Smart filtering** — search packages by name, filter by type (all / outdated / dependencies / devDependencies)
+- **Unused dependency detection** — powered by `depcheck`; highlights packages declared in `package.json` but not imported in the project
+- **Smart filters panel** — contextual filter chips that surface the most relevant package subsets at a glance
+- **Script runner** — run any `package.json` script from the browser with live output streaming and per-script run history
+- **Dark mode** — system-aware theme with a manual toggle; preference persisted across sessions
 - **Fully responsive** — works on mobile, tablet, and desktop
 
 ## Requirements
