@@ -8,6 +8,7 @@ import { createOperationsRouter } from './routes/operations.js'
 import { createProjectRouter } from './routes/project.js'
 import { createAuditRouter } from './routes/audit.js'
 import { createScriptsRouter } from './routes/scripts.js'
+import { createDepcheckRouter } from './routes/depcheck.js'
 
 export function createServer(projectPath: string, clientDistPath: string, port?: number, token?: string): Express {
   const app = express()
@@ -34,6 +35,7 @@ export function createServer(projectPath: string, clientDistPath: string, port?:
   app.use('/api/project', createProjectRouter(projectPath))
   app.use('/api/audit', createAuditRouter(projectPath))
   app.use('/api/scripts', createScriptsRouter(projectPath))
+  app.use('/api/depcheck', createDepcheckRouter(projectPath))
 
   if (existsSync(clientDistPath)) {
     const rawHtml = readFileSync(join(clientDistPath, 'index.html'), 'utf-8')

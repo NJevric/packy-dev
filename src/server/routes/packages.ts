@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from 'express'
 import { getPackages } from '../services/packageJson.js'
-import { getLatestVersion } from '../services/registryClient.js'
+import { getLatestVersion, getSmartMetadata } from '../services/registryClient.js'
 import {
   detectPackageManager,
   getUninstallCommand,
@@ -42,6 +42,23 @@ export function createPackagesRouter(projectPath: string): Router {
         success: false,
         error: 'Failed to get packages',
       })
+    }
+  })
+
+  // GET /api/packages/smart-data - Batch enriched metadata for smart filters
+  router.get('/smart-data', async (_req: Request, res: Response) => {
+    try {
+      const packages = getPackages(projectPath)
+      const smartData = await Promise.all(
+        packages.map(async (pkg) => {
+          const meta = await getSmartMetadata(pkg.name)
+          return { name: pkg.name, ...meta }
+        })
+      )
+      res.json({ success: true, data: smartData })
+    } catch (error) {
+      console.error('Error fetching smart data:', error)
+      res.status(500).json({ success: false, error: 'Failed to fetch smart metadata' })
     }
   })
 

@@ -158,6 +158,21 @@ export interface AuditFixRequest {
   packageName?: string
 }
 
+// Smart filter types
+export interface SmartPackageData {
+  name: string
+  license: string | null
+  weeklyDownloads: number | null
+  lastPublished: string | null
+}
+
+// Depcheck types
+export interface DepcheckResult {
+  dependencies: string[]
+  devDependencies: string[]
+  missing: Record<string, string[]>
+}
+
 // Audit log types
 export interface AuditLogEntry {
   id: string
