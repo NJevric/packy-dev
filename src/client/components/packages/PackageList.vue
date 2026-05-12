@@ -25,6 +25,7 @@ const emit = defineEmits<{
 const packagesRef = computed(() => props.packages)
 const { query, filter, filtered, counts, setQuery, setFilter } = useSearch(packagesRef)
 
+
 const filters: { value: FilterType; label: string; countKey: keyof typeof counts.value }[] = [
   { value: 'all', label: 'All', countKey: 'total' },
   { value: 'outdated', label: 'Outdated', countKey: 'outdated' },
