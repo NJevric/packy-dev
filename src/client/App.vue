@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView, RouterLink } from 'vue-router'
-import { Package, ShieldAlert, Layers, Activity } from 'lucide-vue-next'
+import { Package, ShieldAlert, Layers, Activity, Terminal } from 'lucide-vue-next'
 </script>
 
 <template>
@@ -29,6 +29,14 @@ import { Package, ShieldAlert, Layers, Activity } from 'lucide-vue-next'
           >
             <Layers class="h-4 w-4" />
             <span class="hidden sm:inline">Dependencies</span>
+          </RouterLink>
+          <RouterLink
+            to="/scripts"
+            class="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-muted"
+            active-class="!text-foreground bg-muted"
+          >
+            <Terminal class="h-4 w-4" />
+            <span class="hidden sm:inline">Scripts</span>
           </RouterLink>
           <RouterLink
             to="/security"

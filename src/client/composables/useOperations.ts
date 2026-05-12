@@ -1,10 +1,12 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useQueryClient } from '@tanstack/vue-query'
 import { useOperationsStore } from '@/stores/operations'
+import { useScriptsStore } from '@/stores/scripts'
 import type { OperationEvent } from '@shared/types'
 
 export function useOperations() {
   const store = useOperationsStore()
+  const scriptsStore = useScriptsStore()
   const queryClient = useQueryClient()
   const isConnected = ref(false)
   let eventSource: EventSource | null = null
@@ -29,6 +31,7 @@ export function useOperations() {
         }
 
         store.handleEvent(data as OperationEvent)
+        scriptsStore.handleEvent(data as OperationEvent)
 
         if (data.type === 'complete' || data.type === 'error') {
           queryClient.invalidateQueries({ queryKey: ['operations', 'history'] })

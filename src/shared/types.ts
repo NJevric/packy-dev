@@ -44,8 +44,9 @@ export type PackageManager = 'npm' | 'yarn' | 'pnpm'
 // Operation types
 export interface Operation {
   id: string
-  type: 'install' | 'update' | 'remove' | 'audit' | 'audit-fix'
+  type: 'install' | 'update' | 'remove' | 'audit' | 'audit-fix' | 'script'
   packageName?: string
+  scriptName?: string
   fromVersion?: string
   toVersion?: string
   command: string
@@ -53,6 +54,12 @@ export interface Operation {
   startedAt: Date
   completedAt?: Date
   exitCode?: number
+}
+
+// Script types
+export interface ScriptDefinition {
+  name: string
+  command: string
 }
 
 export interface OperationLogEntry {
@@ -64,7 +71,7 @@ export interface OperationLogEntry {
 
 // SSE Event types
 export type OperationEvent =
-  | { type: 'start'; operationId: string; command: string; operationType: Operation['type']; packageName?: string; fromVersion?: string }
+  | { type: 'start'; operationId: string; command: string; operationType: Operation['type']; packageName?: string; scriptName?: string; fromVersion?: string }
   | { type: 'stdout'; operationId: string; data: string }
   | { type: 'stderr'; operationId: string; data: string }
   | { type: 'complete'; operationId: string; exitCode: number; fromVersion?: string; toVersion?: string }

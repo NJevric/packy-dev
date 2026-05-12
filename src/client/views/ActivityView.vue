@@ -23,6 +23,7 @@ const TYPE_BADGE: Record<ActivityType, string> = {
   audit: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
   'audit-fix': 'bg-green-500/10 text-green-700 dark:text-green-400',
   'audit-log': 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
+  script: 'bg-purple-500/10 text-purple-700 dark:text-purple-400',
 }
 
 const TYPE_LABEL: Record<ActivityType, string> = {
@@ -32,6 +33,7 @@ const TYPE_LABEL: Record<ActivityType, string> = {
   audit: 'Audit',
   'audit-fix': 'Fix',
   'audit-log': 'Audit',
+  script: 'Script',
 }
 
 // ── Stats ──────────────────────────────────────────────────────────────────────
