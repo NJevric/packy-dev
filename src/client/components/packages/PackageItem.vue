@@ -31,7 +31,7 @@ const isVersionPickerOpen = ref(false)
 
 <template>
   <div
-    class="flex items-center justify-between p-4 rounded-lg border bg-white hover:bg-accent/50 transition-colors cursor-pointer gap-3"
+    class="flex items-center justify-between p-4 rounded-lg border bg-card text-card-foreground hover:bg-accent/50 transition-colors cursor-pointer gap-3"
     @click="emit('select', package.name)"
   >
     <div class="flex-1 min-w-0">

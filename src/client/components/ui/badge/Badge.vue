@@ -9,6 +9,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   variant: 'default',
+  class: undefined,
 })
 </script>
 

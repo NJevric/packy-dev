@@ -190,3 +190,66 @@ export function clearCache(packageName?: string): void {
     cache.clear()
   }
 }
+
+// Cache for last-published date lookups
+const publishDateCache = new Map<string, { date: string | null; timestamp: number }>()
+
+/**
+ * Fetches the last published date for the latest version of a package.
+ */
+export async function getLastPublished(packageName: string): Promise<string | null> {
+  const cached = publishDateCache.get(packageName)
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.date
+  }
+
+  try {
+    const encodedName = packageName.startsWith('@')
+      ? `@${encodeURIComponent(packageName.slice(1))}`
+      : encodeURIComponent(packageName)
+
+    const response = await fetch(`${NPM_REGISTRY}/${encodedName}`, {
+      headers: { Accept: 'application/vnd.npm.install-v1+json' },
+    })
+
+    if (!response.ok) {
+      publishDateCache.set(packageName, { date: null, timestamp: Date.now() })
+      return null
+    }
+
+    const data = await response.json() as {
+      'dist-tags': { latest: string }
+      time?: Record<string, string>
+    }
+
+    const latestVersion = data['dist-tags']?.latest
+    const date = (latestVersion && data.time?.[latestVersion]) ?? data.time?.modified ?? null
+
+    publishDateCache.set(packageName, { date, timestamp: Date.now() })
+    return date
+  } catch {
+    publishDateCache.set(packageName, { date: null, timestamp: Date.now() })
+    return null
+  }
+}
+
+/**
+ * Fetches smart filter metadata (license, downloads, lastPublished) for a package.
+ */
+export async function getSmartMetadata(packageName: string): Promise<{
+  license: string | null
+  weeklyDownloads: number | null
+  lastPublished: string | null
+}> {
+  const [info, downloads, lastPublished] = await Promise.all([
+    getPackageInfo(packageName),
+    getDownloadCounts(packageName),
+    getLastPublished(packageName),
+  ])
+
+  return {
+    license: info?.license ?? null,
+    weeklyDownloads: downloads?.weekly ?? null,
+    lastPublished,
+  }
+}

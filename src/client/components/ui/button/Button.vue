@@ -14,6 +14,7 @@ const props = withDefaults(defineProps<Props>(), {
   as: 'button',
   variant: 'default',
   size: 'default',
+  class: undefined,
 })
 
 const delegatedProps = computed(() => {
