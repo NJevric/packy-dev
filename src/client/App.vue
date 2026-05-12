@@ -121,6 +121,5 @@ const themeOptions = [
     <main class="container mx-auto py-6 px-4 sm:px-6">
       <RouterView />
     </main>
-
   </div>
 </template>
