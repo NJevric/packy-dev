@@ -81,7 +81,7 @@
     "concurrently": "^9.2.1",
     "eslint": "^10.3.0",
     "eslint-plugin-vue": "^10.9.1",
-    "vue-eslint-parser": "^9.4.3",
+    "vue-eslint-parser": "^10.3.0",
     "jsdom": "^29.1.1",
     "lucide-vue-next": "^1.0.0",
     "pinia": "^3.0.4",
